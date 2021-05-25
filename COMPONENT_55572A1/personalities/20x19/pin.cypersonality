@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Personality id="20x19_pin" name="Pin" version="1.0" path="Pin" xmlns="http://cypress.com/xsd/cyhwpersonality_v1">
+  <Dependencies>
+    <IpBlock name="20x19_ioss" />
+    <Resource name="ioss\.pin" />
+  </Dependencies>
+  <ExposedMembers>
+    <ExposedMember key="cfgStruct" paramId="cfgStruct" />
+    <ExposedMember key="cfgConnection" paramId="cfgConnection" />
+    <ExposedMember key="type" paramId="Type" />
+    <ExposedMember key="gpioResource" paramId="gpioResource" />
+  </ExposedMembers>
+  <Parameters>
+    <ParamDoc id="apiDoc" name="Configuration Help" group="Peripheral Documentation" default="file:///`${cy_libs_path()}`/docs/group___g_p_i_o_driver.html" linkText="Open GPIO Documentation" visible="true" desc="Opens the Hardware Driver Documentation" />
+
+    <ParamChoice id="Type" name="Type" group="General" default="PERIPHERAL" visible="true" editable="true" desc="Specifies the behavior for the pin.">
+      <Entry name="Button" value="BUTTON" visible="true" />
+      <Entry name="GPIO" value="GPIO" visible="true" />
+      <Entry name="LED" value="LED" visible="true" />
+      <Entry name="Peripheral" value="PERIPHERAL" visible="true" />
+    </ParamChoice>
+
+	<!-- Peripheral -->
+    <ParamSignal port="aux[0]" name="Target" group="General" visible="`${Type eq PERIPHERAL}`" desc="Peripheral driver signal." canBeEmpty="true" />
+
+    <!-- Basic GPIO config settings -->
+    <ParamRange id="Index" name="Index" group="General" default="0" min="`${Type eq PERIPHERAL ? 0 : 1}`" max="`${COUNT}`" resolution="1" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Index into the Pin's &quot;platform_`${toLower(Type)}`[]&quot; array (cycfg_pins.c). Note: Choosing a value above the maximum number defined in platform_target.h will require user to update a new value in wiced_platform_`${toLower(Type)}`_number_t enum." />
+
+    <ParamChoice id="DefaultState" name="Default State" group="General" default="WICED_GPIO_PIN_OUTPUT_LOW" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Pin state on power up.">
+      <Entry name="Low" value="WICED_GPIO_PIN_OUTPUT_LOW" visible="true" />
+      <Entry name="High" value="WICED_GPIO_PIN_OUTPUT_HIGH" visible="true" />
+    </ParamChoice>
+
+    <ParamChoice id="PressedValue" name="Button Pressed Value" group="General" default="WICED_GPIO_PIN_OUTPUT_LOW" visible="`${Type eq BUTTON}`" editable="`${Type eq BUTTON}`" desc="State when button is pressed.">
+      <Entry name="Low" value="WICED_GPIO_PIN_OUTPUT_LOW" visible="true" />
+      <Entry name="High" value="WICED_GPIO_PIN_OUTPUT_HIGH" visible="true" />
+    </ParamChoice>
+
+    <ParamBool id="OutputEnable" name="Enable Output" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Enables the output of the pin." />
+
+    <ParamBool id="PullUp" name="Pull Up" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Pulls up the pin." />
+
+    <ParamBool id="PullDown" name="Pull Down" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Pulls down the pin." />
+
+    <ParamBool id="HysteresisEnable" name="Enables Hysteresis" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Enables the hysteresis." />
+
+    <ParamBool id="InputDisable" name="Disable Input" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Disables the input of the pin." />
+
+    <!-- Advanced GPIO config settings -->
+    <ParamBool id="InterruptEnable" name="Enable Interrupt" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Enables the interrupt signal from the pin." />
+
+    <ParamChoice id="InterruptTrigger" name="Interrupt Trigger" group="General" default="WICED_GPIO_EN_INT_RISING_EDGE" visible="`${Type ne PERIPHERAL &amp;&amp; InterruptEnable}`" editable="true" desc="Controls what signal change triggers the interrupt." >
+      <Entry name="Level High" value="WICED_GPIO_EN_INT_LEVEL_HIGH" visible="true" />
+      <Entry name="Level Low" value="WICED_GPIO_EN_INT_LEVEL_LOW" visible="true" />
+      <Entry name="Rising Edge" value="WICED_GPIO_EN_INT_RISING_EDGE" visible="true" />
+      <Entry name="Falling Edge" value="WICED_GPIO_EN_INT_FALLING_EDGE" visible="true" />
+      <Entry name="Both Edges" value="WICED_GPIO_EN_INT_BOTH_EDGE" visible="true" />
+    </ParamChoice>
+
+    <!-- Utility -->
+    <ParamString id="instNum" name="" group="" default="`${getInstNumber(&quot;pin&quot;)}`" visible="false" editable="false" desc="" />
+    <ParamString id="idxNum" name="" group="" default="`${hasExposedMember(&quot;ioss[0]&quot;, &quot;pinIndex&quot; . instNum) ? getExposedMember(&quot;ioss[0]&quot;, &quot;pinIndex&quot; . instNum) : &quot;&quot;}`" visible="false" editable="false" desc="" />
+    <ParamString id="gpioResource" name="" group="" default="WICED_PLATFORM_`${Type}`_`${Index}`" visible="false" editable="false" desc="" />
+    <ParamString id="cfgStruct" name="" group="" default="`${INST_NAME}`_config" visible="false" editable="false" desc="" />
+    <ParamString id="cfgMap" name="" group="" default="`${INST_NAME}`_map" visible="false" editable="false" desc="" />
+    <ParamString id="cfgConnection" name="" group="" default="`${Type eq PERIPHERAL &amp;&amp; hasConnection(&quot;aux&quot;, 0) ? getDefineNameFromSignal(getParamValue(&quot;aux[0]&quot;)) . &quot;_TRIGGER_IN&quot; : &quot;WICED_GPIO&quot;}`" visible="false" editable="false" desc="" />
+
+  </Parameters>
+
+   <DRCs>
+    <DRC type="ERROR" text="The top-level Pins must be enabled to generate the pin initialization code." condition="`${!isBlockUsed(&quot;ioss[0]&quot;)}`" location="ioss[0]" >
+      <FixIt action="ENABLE_BLOCK" target="ioss[0]" value="" valid="true" />
+    </DRC>
+  </DRCs>
+
+  <ConfigFirmware>
+    <ConfigInclude value="wiced_platform.h" include="true" />
+
+    <ConfigDefine name="`${INST_NAME}`" value="BT_GPIO_`${getInstNumber(&quot;pin&quot;)}`" public="true" include="true" />
+
+    <ConfigDefine name="`${cfgStruct}`" public="false" include="`${Type ne PERIPHERAL}`" value="\&#xA;{\&#xA;
+   .gpio = (wiced_bt_gpio_numbers_t*)&amp;platform_gpio_pins[PLATFORM_GPIO_`${idxNum}`].gpio_pin, \&#xA;
+   .config = `${
+      (InputDisable ? &quot;WICED_GPIO_INPUT_DISABLE&quot; : &quot;WICED_GPIO_INPUT_ENABLE&quot;) .
+      (HysteresisEnable ? &quot; | WICED_GPIO_HYSTERESIS_ON&quot; : &quot;&quot;) .
+      (PullDown ? &quot; | WICED_GPIO_PULL_DOWN&quot; : &quot;&quot;) .
+      (PullUp ? &quot; | WICED_GPIO_PULL_UP&quot; : &quot;&quot;) .
+      (OutputEnable ? &quot; | WICED_GPIO_OUTPUT_ENABLE&quot; : &quot;&quot;) .
+      (InterruptEnable ? &quot; | &quot; . InterruptTrigger : &quot;&quot;)
+      }`, \&#xA;
+   .default_state = `${DefaultState}`, \&#xA;
+`${Type eq BUTTON ? &quot;   .button_pressed_value = &quot; . PressedValue . &quot;, \\&#xA;&quot; : &quot;&quot;}`}" />
+  </ConfigFirmware>
+</Personality>

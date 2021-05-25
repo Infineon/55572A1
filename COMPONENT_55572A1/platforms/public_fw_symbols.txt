@@ -1,0 +1,91 @@
+# Place a '#' in the first column to indicate a comment
+#
+# This file defines OVERRIDE rules for ROM and LIBRARY symbols.
+# Each symbol defined below is used in conjunction with the elf file symbol tables.
+#
+#
+# Comma Seperated Value file
+#
+# Name,     Type,     Visibility,     Mangle Flag,     Mangle Name,     Trampoline Flag,
+#
+# Definitions
+#   Name
+#     <symbol name>    Name of exact symbol to find and modify (may exist in multiple elf files)
+#     <wildcard>       Wildcard is allowed.
+#                          *     match all SYMBOLS after this location in the name.    ie.  <Wiced_*>
+#                                Sections are NOT supported at the moment with wildcards
+#
+#                      Name is CASE-SENSITIVE and WHITE SPACE IN-sensitive at beginning or end of name.
+#
+#   Type
+#     SECTION          Indicates this entry applies to a Symbol (Function or Object) in the elf file
+#     SYMBOL           Indicates this entry applies to 1 or more sections of the same name
+#
+#   Visibility Status
+#     PUBLIC           Symbol will be exported and will be in the open (never mangled)
+#     PRIVATE          Allow libraries to use it as a mangled symbol (if mangling enabled, otherwise it is removed)
+#                      Allow exporting of mangled rom symbols(objects and functions)
+#     SECRET           Never allow this in an output elf file, trampoline function, symdefs, or just-symbols file
+#     no value         Defaults to SECRET (symbol only)
+#
+#   Mangle Flagh
+#     0        => No mangling will occur, use real name
+#     1        => Mangle this entry
+#     No Value => Defaults to 0
+#
+#   Mangle Name
+#     No Value => Use a randomized value (if mangling is enabled)
+#     Value    => Use the supplied value as the new name for the entry
+#                 1st char MUST be a letter (max 17 chars)
+#
+#   Trampoline Flag (for ROM symbols only!! Ignored if symbol is in a library)
+#     0         => No trampoline function generated (Data object would use this value)
+#     1         => Trampoline function generated
+#     No Value  => Defaults to 0 (always for SECTION)
+#
+#                  For simplicity if an OBJECT has this flag set to 1, the script is expected to just ignore it.
+#
+#
+#####################################################################################################################################
+# Section  #
+############
+# Name,                                    Type,      Status,     Mangle Flag,      Mangle Name,     Trampoline Flag
+#CODE_AREA                         ,     SECTION,      PUBLIC,               0,                 ,
+#FIRST_FREE_SECTION_IN_SRAM        ,     SECTION,      PUBLIC,               0,                 ,
+#
+#####################################################################################################################################
+# Symbols -- The corresponding section above must exist IF you are stripping sections/symbols as well. #
+########################################################################################################
+# Name,                                                        Type,      Status,  Mangle Flag,     Mangle Name,     Trampoline Flag,
+BTU_trace_debug                                  ,           SYMBOL,      PUBLIC,            0,                ,                   1
+BTU_trace_error                                  ,           SYMBOL,      PUBLIC,            0,                ,                   1
+wiced_*                                          ,           SYMBOL,      PUBLIC,            0,                ,                   1
+gp_wiced_app_pre_init_cfg                        ,           SYMBOL,      PUBLIC,            0,                ,                   1
+AVCT_Register                                    ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+avrc_is_valid_player_attrib_value                ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+avrc_read_attr_entry_from_stream                 ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+avrc_read_full_name_from_stream                  ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+avrc_read_browse_item_from_stream                ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+avrc_read_name_from_stream                       ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+BTU_copyBdaToStream                              ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+BTU_copyStreamToBda                              ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+BTM_SetPacketTypes                               ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+BTM_UseLeLink                                    ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+ECC_PM_B_NAF                                     ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+sha256_final                                     ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+sha256_init                                      ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+sha256_update                                    ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+smp_aes_decrypt                                  ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+smp_aes_encrypt                                  ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+smp_aes_set_key                                  ,           SYMBOL ,     PUBLIC,            0,                ,                   1
+#
+# general
+strncpy                                           , SYMBOL, PUBLIC, 0, , 1
+strlen                                            , SYMBOL, PUBLIC, 0, , 1
+strcmp                                            , SYMBOL, PUBLIC, 0, , 1
+memcmp                                            , SYMBOL, PUBLIC, 0, , 1
+memcpy                                            , SYMBOL, PUBLIC, 0, , 1
+memset                                            , SYMBOL, PUBLIC, 0, , 1
+__aeabi_memclr                                   ,           SYMBOL ,      PUBLIC,      0,                      ,              1
+__aeabi_memcpy                                   ,           SYMBOL ,      PUBLIC,      0,                      ,              1
+__aeabi_uldivmod                                 ,           SYMBOL ,      PUBLIC,      0,                      ,              1

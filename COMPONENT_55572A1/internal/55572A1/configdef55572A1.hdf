@@ -1,0 +1,59 @@
+# DO NOT EDIT MANUALLY! FW2 VERSION
+SECTION "Config Data Entries" 0
+{
+     COMMAND "Data" 0x0103
+     {
+         doc "Config item code used to write an arbitrary chunk of data to an arbitrary address."
+         PARAM "Address"
+             uint32
+             doc "The address to which the Data bytes are to be loaded.";
+         PARAM "Data"
+             uint8[0xFF00] omit_pad_bytes
+             doc "The data bytes to be loaded to the Address specified. The data with arbitrary length. "
+                 "The length is implied by the size of the array specified for data, as in data = {0x01, 0x02}.";
+     }
+
+     COMMAND "SubDS" 0x0134
+     {
+         doc "Config item code used to store a sub ds record."
+         PARAM "Data"
+             uint8[0xFFFFFF00] omit_pad_bytes
+             doc "DS Length    UINT32 Length of sub DS data"
+                 "DS Address   UINT32 Physical Address of data field"
+                 "DS Type      UINT32 Type of DS"
+                 "             enum"
+                 "             {"
+                 "                 {0x00, NO_CERT},"
+                 "                 {0x01, FW_SEC_CERT},"
+                 "                 {0x02, FW_UNSEC_CERT},"
+                 "                 {0x03, CUSTOMER_CERT}"
+                 "             };"
+                 "Data         UINT8  The data bytes to be loaded to the Address specified. "
+                 "                    The data with arbitrary length. "
+                 "                    The length is implied by the size of the array specified"
+                 "                    for data, as in data = {0x01, 0x02}.";
+     }
+
+     COMMAND "BT MPAF FRAMEWORK" 0x0503
+     {
+         doc "Config item code for Bluetooth MPAF APP."
+         PARAM "MPAF appEnableBitMask"
+             uint32
+              doc "MPAF APP Enable Bit Mask";
+         PARAM "feature map"
+             uint32
+             doc "For BT MPAF feature Map";
+         PARAM "MPAF NV max devinfo"
+             uint8
+             doc " MPAF Platform config, Maximum device info in NV";
+         PARAM "MPAF TRANS MODE"
+             uint8
+             doc " MPAF config transport mode";
+         PARAM "MPAF PKT TYPE"
+             uint8
+             doc " MPAF transport packet type";
+         PARAM "mm_Sbrk_Limit"
+             uint32
+             doc "MM SBRK Limit";
+     }
+}
