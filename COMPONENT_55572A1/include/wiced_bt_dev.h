@@ -1851,12 +1851,6 @@ void wiced_bt_dev_update_hci_trace_mode(wiced_bool_t enable);
  * WICED_BT_NO_RESOURCES  : if couldn't allocate memory to issue command \n
  * WICED_BT_SUCCESS       : if local bdaddr is set successfully \n
  *
- * @note            BD_Address must be in Big Endian format
- *
- * Example:
- * <PRE>    Data         | AB | CD | EF | 01 | 23 | 45 | </PRE>
- * <PRE>    Address      | 0  | 1  | 2  | 3  | 4  | 5  | </PRE>
- *                       For above example it will set AB:CD:EF:01:23:45 bd address
  */
 wiced_result_t wiced_bt_set_local_bdaddr( wiced_bt_device_address_t  bd_addr , wiced_bt_ble_address_type_t addr_type);
 

@@ -78,7 +78,9 @@ CY_RECIPE_DEFINES?=\
     $(CY_CORE_EXTRA_DEFINES)\
     $(CY_TOOLCHAIN_DEBUG_DEFINES)\
     -DSPAR_CRT_SETUP=$(CY_CORE_APP_ENTRY)\
-	$(foreach feature,$(CY_COMPONENT_LIST),-DCOMPONENT_$(subst -,_,$(feature)))
+    $(foreach feature,$(CY_COMPONENT_LIST),-DCOMPONENT_$(subst -,_,$(feature)))\
+    -DCY_SUPPORTS_DEVICE_VALIDATION\
+    -D$(subst -,_,$(DEVICE))
 
 #
 # Application version information
@@ -145,7 +147,7 @@ CY_RECIPE_GENSRC=\
     $(addprefix $(CY_INTERNAL_BASELIB_PATH)/$(CY_CORE_PATCH_LIB_PATH)/,$(CY_APP_PATCH_LIBS))\
     $(addprefix $(CY_APP_PATCH_LIBS_PRO_PATH)/,$(CY_APP_PATCH_LIBS_PRO))\
     $(if $(VERBOSE),"--verbose")\
-	&& CY_CMD_TERM=
+    && CY_CMD_TERM=
 endif
 
 #
@@ -162,7 +164,7 @@ CY_RECIPE_PREBUILD?=\
     --ld="$(CY_CONFIG_DIR)/$(APPNAME).ld"\
     $(if $(findstring 1,$(DIRECT_LOAD)),--direct)\
     $(if $(VERBOSE),"--verbose")\
-	&& CY_CMD_TERM=
+    && CY_CMD_TERM=
 endif
 
 #
@@ -201,7 +203,7 @@ CY_RECIPE_POSTBUILD?=\
               $(CY_TOOLCHAIN_STARTGROUP) $(CY_RECIPE_EXTRA_LIBS) $(CY_BUILD_ALL_LIB_FILES) $(CY_BUILD_SHAREDLIB_LIBLIST) $(CY_TOOLCHAIN_ENDGROUP)"\
     --subdsargs="$(CY_CORE_SUBDS_ARGS)"\
     --verbose=$(if $(VERBOSE),$(VERBOSE),0)\
-	&& CY_CMD_TERM=
+    && CY_CMD_TERM=
 endif
 
 #

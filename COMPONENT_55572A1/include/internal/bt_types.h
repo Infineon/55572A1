@@ -134,8 +134,18 @@ typedef enum
 
 #ifndef WICED_BT_DEVICE_ADDRESS
 #define WICED_BT_DEVICE_ADDRESS             /**< Bluetooth Device Address Length */
-#define BD_ADDR_LEN     6
-typedef UINT8         wiced_bt_device_address_t[BD_ADDR_LEN]; /**< Bluetooth Device Address */
+#define BD_ADDR_LEN     6  /**< Bluetooth device address length */
+/**
+ * Bluetooth Device address
+ * @note: The Bluetooth device address is expressed in MSB format
+ *
+ *  ---------------------------------------------------
+ * |byte 0 | byte 1 | byte 2 | byte 3| byte 4| byte 5 |
+ *  ---------------------------------------------------
+ * | NAP 1 | NAP 0  |   UAP  | LAP 2 | LAP 1 | LAP 0  |
+ *  ---------------------------------------------------
+ * */
+typedef UINT8         wiced_bt_device_address_t[BD_ADDR_LEN];
 #endif
 
 #ifndef BD_ADDR

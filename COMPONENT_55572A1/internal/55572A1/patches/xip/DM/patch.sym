@@ -1250,3 +1250,5 @@ wiced_sco_spk_buf_count = 0x8046fecd;
 wiced_sco_spk_write_index = 0x8046fece;
 wiced_trans_tx_pool_list = 0x8046fed0;
 wiced_transport_cfg = 0x8046fed4;
+wiced_hal_get_pseudo_rand_number = 0x6d026d;
+wiced_bcsulp_AES = 0x6e7579;

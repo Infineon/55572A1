@@ -36,7 +36,7 @@ set -e
 #set -x
 
 #######################################################################################################################
-# This script performs post-build operations to form BT download images.
+# This script performs post-build operations to form Bluetooth application download images.
 #
 # usage:
 #   bt_post_build.bash  --shell=<modus shell path>
