@@ -82,6 +82,7 @@ CY_DOWNLOAD_CMD=\
 	--elf="$(CY_CONFIG_DIR)/$(APPNAME).elf"\
 	--uart=$(UART)\
 	--direct=$(DIRECT_LOAD)\
+	--lcs=$(LIFE_CYCLE_STATE)\
 	$(if $(VERBOSE),--verbose)
 
 program: build qprogram

@@ -229,7 +229,7 @@ void wiced_bt_avrc_tg_init( wiced_bt_avrc_tg_event_cback_t *p_cb );
 /*******************************************************************************
 * Function        wiced_bt_avrc_tg_register
 
-** Description    Called to register AVRC profile with the BT stack
+** Description    Called to register AVRC profile with the Bluetooth stack
 *******************************************************************************/
 void wiced_bt_avrc_tg_register(void);
 

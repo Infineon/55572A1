@@ -32,7 +32,7 @@
  */
  /** @file
  *
- *  This implements the application-thread level event handling for WICED Apps
+ *  This implements the application-thread level event handling for AIROC Apps
  */
 #ifndef __WICED_BT_EVENT_H__
 #define __WICED_BT_EVENT_H__

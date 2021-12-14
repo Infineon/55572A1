@@ -75,6 +75,9 @@ sub main
 		}
 		elsif($arg =~ /^DIRECT_LOAD/) {
 			$direct_load = 1;
+			if($arg =~ /^DIRECT_LOAD=(0x[0-9A-Fa-f]+)/) {
+				$direct_load = hex($1);
+			}
 		}
 	}
 
@@ -151,7 +154,7 @@ sub main
     if(defined $outfile) {
         select STDOUT;
     }
-    report_resource_usage($sections, $ld_info, $load_regions);
+    report_resource_usage($sections, $ld_info, $load_regions, $direct_load);
 }
 
 sub dump_cgs
@@ -171,7 +174,7 @@ sub post_process_cgs
     my @lines;
     return if $cgs_record->{type} ne 'patch';
 
-    if($direct_load == 1 && $cgs_record->{file} !~ /43012C0/) {
+    if($direct_load && $cgs_record->{file} !~ /43012C0/) {
         push @lines, @{$cgs_record->{lines}};
         $cgs_record->{lines} = [];
         foreach my $line (@lines) {
@@ -181,7 +184,7 @@ sub post_process_cgs
     }
 
     # for now just need to split TCA records from patch.cgs to end of combined cgs
-    return if $cgs_record->{file} !~ /(20721B2|20719B2)/;
+    return if $cgs_record->{file} !~ /(20721B2|20719B2|20739B2)/;
     @lines = ();
     push @lines, @{$cgs_record->{lines}};
     $cgs_record->{lines} = [];
@@ -468,8 +471,11 @@ sub scan_ld_file
 
 sub report_resource_usage
 {
-	my ($sections, $ld_info, $load_regions) = @_;
+	my ($sections, $ld_info, $load_regions, $direct_load) = @_;
 	my $total;
+	my $end;
+	my $last_ram_addr = 0;
+	my $end_ram_addr = 0;
 	print "\n";
 	printf "Patch code starts at    0x%06X (RAM address)\n", $ld_info->{pram_patch_begin};
 	printf "Patch code ends at      0x%06X (RAM address)\n", $ld_info->{pram_patch_end};
@@ -491,20 +497,39 @@ sub report_resource_usage
 			last;
 		}
 		next unless defined $section->{mem_type};
+		$end = $section->{sh_addr} + $section->{sh_size};
 		printf "% 16s %8s start 0x%06X, end 0x%06X, size %d\n", $section->{name}, $section->{mem_type}, $section->{sh_addr},
-					$section->{sh_addr} + $section->{sh_size}, $section->{sh_size};
+					$end, $section->{sh_size};
+		if($end > $last_ram_addr) {
+			$last_ram_addr = $end;
+		}
 	}
 	foreach my $region (values(%{$load_regions})) {
 		next if $region->{end_used} == 0;
 		my $use = $region->{end_used} - $region->{start_used};
 		$total += $use;
+		next if $use == 0;
 		printf "  %s (%s): used 0x%06X - 0x%06X size (%d)\n", $region->{name}, $region->{type}, $region->{start_used}, $region->{end_used}, $use;
+		# find end of SRAM
+		if($region->{type} eq 'SRAM') {
+			$end_ram_addr = $region->{end} if $end_ram_addr < $region->{end};
+		}
 	}
 	printf "  Total application footprint %d (0x%X)\n\n", $total, $total;
 	if(defined $ld_info->{upgrade_storage}) {
 		printf "DS available %d (0x%06X) at 0x%06X\n\n", $ld_info->{upgrade_storage}, $ld_info->{upgrade_storage}, $ld_info->{flash_ds};
 	}
-
+	if($direct_load && $direct_load != 1) {
+		if($last_ram_addr > $direct_load) {
+			printf "Moving DIRECT LOAD address from 0x%06X to 0x%06X\n",
+					$direct_load, ($last_ram_addr + 0x10) & ~0xf;
+			$direct_load = ($last_ram_addr + 0x10) & ~0xf; # round up
+		}
+		printf "App extends to 0x%06X, DIRECT LOAD address 0x%06X, end SRAM 0x%06X\n",
+						$last_ram_addr, $direct_load, $end_ram_addr;
+		printf "SS+DS cannot exceed %d (0x%04X) bytes\n",
+					$end_ram_addr - $direct_load, $end_ram_addr - $direct_load;
+	}
 }
 
 sub output_cgs_cfg
@@ -1113,6 +1138,22 @@ sub process_comment_cfg
 	}
 }
 
+sub line_should_continue
+{
+	my ($line) = @_;
+	# ending in semicolon
+	return 0 if $line =~ /\;\s*$/;
+	# count parens
+	my $str;
+	$str = $line;
+	$str =~ s/[^\(]//g;
+	my $left_paren_count = length($str);
+	$str = $line;
+	$str =~ s/[^\)]//g;
+	my $right_paren_count = length($str);
+	return ($left_paren_count > $right_paren_count);
+}
+
 sub process_comment_cfg_param
 {
 	my($params, $lines) = @_;
@@ -1157,6 +1198,12 @@ sub process_comment_cfg_param
 
 	while(defined( my $line = shift @{$lines})) {
 		my $p = {};
+		while(line_should_continue($line)) {
+			my $next_line = shift @{$lines};
+			last if !defined $next_line;
+			# warn "concatenating line \"$line\" with \"$next_line\"\n";
+			$line .= " $next_line";
+		}
 		if($line =~ /^(\w+)\s*\[\s*(\d+)\s*\]/) {
 			$p->{'type'} = $1;
 			$p->{'elements'} = $2;
@@ -1202,6 +1249,10 @@ sub process_comment_cfg_param
 			$p->{'val'} = $2;
 		}
 		elsif($line =~ /^(\w+)\s*\=\s*(\(\s*.*)$/) {
+			$p->{'type'} = $1;
+			$p->{'rule'} = $2;
+		}
+		elsif($line =~ /^(\w+)\s*\=\s*\"([^\"]+)\"$/) {
 			$p->{'type'} = $1;
 			$p->{'rule'} = $2;
 		}

@@ -33,13 +33,13 @@
 
 /** @file
  *
- * @defgroup Transport     WICED Transport
+ * @defgroup Transport     AIROC Transport
  * @ingroup HardwareDrivers
  *
  * Defines the transport utilities for configuring the transport, send data and
  * receive data. This supports UART transport in HCI Mode
  *
- * Wiced Transport uses the generic pool available for receiving and sending packet
+ * AIROC Transport uses the generic pool available for receiving and sending packet
  * over the transport. Following are the configurations of the generic pool
  * 1:   buffer size - 8 bytes, buffer count - 128
  * 2:   buffer size - 32 bytes, buffer count - 48
@@ -68,9 +68,9 @@
 **                                                Type Definitions
 *****************************************************************************/
 /* TODO: handle for sleep wakeup behavior in service_transport_set_detect_on */
-#define wiced_transport_set_detect_on(a)    WICED_FALSE
+#define wiced_transport_set_detect_on(a)    WICED_TRUE
 
-/** Wiced transport types */
+/** AIROC transport types */
 typedef enum
 {
     WICED_TRANSPORT_UART,
@@ -78,7 +78,7 @@ typedef enum
     WICED_TRANSPORT_UNDEFINED
 }wiced_transport_type_t;
 
-/** Wiced uart transport mode */
+/** AIROC uart transport mode */
 typedef enum
 {
     WICED_TRANSPORT_UART_HCI_MODE,
@@ -86,13 +86,13 @@ typedef enum
 }wiced_transport_uart_mode_t;
 
 
-/** wiced transport buffer pool */
+/** AIROC transport buffer pool */
 typedef struct _wiced_trans_buffer_pool_t wiced_transport_buffer_pool_t;
 
-/** Wiced transport status handler  */
+/** AIROC transport status handler  */
 typedef void (*wiced_transport_status_handler_t)( wiced_transport_type_t type );
 
-/** Wiced transport data handler
+/** AIROC transport data handler
 * Call back registered by the application to recieve data. Application has to free the
 * buffer in which data is received. Use the API wiced_transport_free_buffer to free
 * the rx buffer
@@ -105,7 +105,7 @@ typedef void (*wiced_transport_status_handler_t)( wiced_transport_type_t type );
 typedef uint32_t (*wiced_tranport_data_handler_t)( uint8_t* p_data, uint32_t data_len );
 
 #ifdef NEW_DYNAMIC_MEMORY_INCLUDED
-/** Wiced transport tx complete indication. Indicates the application that a packet is sent using
+/** AIROC transport tx complete indication. Indicates the application that a packet is sent using
  *    a buffer in the indicated pool.
  *
  * @param[in] p_pool : Pool pointer, buffer is used from this pool for sending the packet
@@ -114,7 +114,7 @@ typedef uint32_t (*wiced_tranport_data_handler_t)( uint8_t* p_data, uint32_t dat
  */
 typedef void (*wiced_transport_tx_complete_t)(void);
 #else
-/** Wiced transport tx complete indication. Indicates the application that a packet is sent using
+/** AIROC transport tx complete indication. Indicates the application that a packet is sent using
  *    a buffer in the indicated pool.
  *
  * @param[in] p_pool : Pool pointer, buffer is used from this pool for sending the packet
@@ -153,7 +153,7 @@ typedef union
 }wiced_transport_interface_cfg_t;
 
 #ifndef NEW_DYNAMIC_MEMORY_INCLUDED
-/** Wiced receive buffer pool configuration. Application shall use this to receive
+/** AIROC receive buffer pool configuration. Application shall use this to receive
 * packet of size( i.e if payload size > 252 ) > 268 bytes
 */
 typedef struct wiced_transport_rx_buff_pool_cfg_s
@@ -163,19 +163,19 @@ typedef struct wiced_transport_rx_buff_pool_cfg_s
 }wiced_transport_rx_buff_pool_cfg_t;
 #endif /* NEW_DYNAMIC_MEMORY_INCLUDED */
 
-/** Wiced transport config */
+/** AIROC transport config */
 typedef struct wiced_transport_cfg_s
 {
-    wiced_transport_type_t              type;                   /**< Wiced transport type. */
-    wiced_transport_interface_cfg_t     cfg;                    /**< Wiced transport interface config. */
+    wiced_transport_type_t              type;                   /**< AIROC transport type. */
+    wiced_transport_interface_cfg_t     cfg;                    /**< AIROC transport interface config. */
 #ifdef NEW_DYNAMIC_MEMORY_INCLUDED
-    wiced_transport_heap_cfg_t          heap_config;           /**< Wiced transport heap config. */
+    wiced_transport_heap_cfg_t          heap_config;           /**< AIROC transport heap config. */
 #else
-    wiced_transport_rx_buff_pool_cfg_t  rx_buff_pool_cfg;       /**< Wiced rx buffer pool config. */
+    wiced_transport_rx_buff_pool_cfg_t  rx_buff_pool_cfg;       /**< AIROC rx buffer pool config. */
 #endif  /*  */
-    wiced_transport_status_handler_t    p_status_handler;       /**< Wiced transport status handler.*/
-    wiced_tranport_data_handler_t       p_data_handler;         /**< Wiced transport receive data handler. */
-    wiced_transport_tx_complete_t       p_tx_complete_cback;    /**< Wiced transport tx complete callback. */
+    wiced_transport_status_handler_t    p_status_handler;       /**< AIROC transport status handler.*/
+    wiced_tranport_data_handler_t       p_data_handler;         /**< AIROC transport receive data handler. */
+    wiced_transport_tx_complete_t       p_tx_complete_cback;    /**< AIROC transport tx complete callback. */
 }wiced_transport_cfg_t;
 
 #pragma pack()
@@ -190,7 +190,7 @@ typedef struct wiced_transport_cfg_s
  * Intializes and configures the transport and also registers the handlers to be invoked on transport
  * detection and on receiving the data
  *
- * * @param[in]    p_cfg           :wiced transport config
+ * * @param[in]    p_cfg           : AIROC transport config
  *
  * @return     : wiced_result_t
  */

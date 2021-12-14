@@ -33,11 +33,12 @@
 
 #include <wiced.h>
 #include "wiced_platform.h"
-#include "cycfg_pins.h"
+//#include "cycfg_pins.h"
+#include "cycfg_pins.h" //it will remove when GeneratedSource/cycfg_pins.h is correct
 #include "bt_types.h"
 
 /* TODO: disallow to access last_seq_num */
-uint32_t last_seq_num = 0;
+__attribute__((weak)) uint32_t last_seq_num = 0;
 
 /* TODO: temporary implementation for wiced_bt_utils APIs */
 #include <wiced_bt_dev.h>
@@ -61,6 +62,19 @@ void wiced_platform_register_button_callback(wiced_platform_button_number_t butt
         wiced_hal_gpio_register_pin_for_interrupt(*platform_button[button].gpio, userfn, userdata);
         wiced_hal_gpio_configure_pin(*platform_button[button].gpio, (platform_button[button].config | trigger_edge), platform_button[button].default_state);
     }
+}
+
+/**
+ *  \brief Return state of the pin when button is pressed
+ *
+ *  \param [in] button select a button from wiced_platform_button_number_t
+ *
+ *  \return button pressed value
+ *
+ */
+uint32_t wiced_platform_get_button_pressed_value(wiced_platform_button_number_t button)
+{
+	return platform_button[button].button_pressed_value;
 }
 
 wiced_bool_t wiced_bt_utils_acl_connect(wiced_bt_device_address_t remote_bd_addr)
@@ -111,13 +125,13 @@ uint64_t wiced_bt_utils_system_time_microsecond64_get(void)
 #endif
 
 /* TODO: temporary implementation for wiced_hal_gpio APIs */
-uint32_t wiced_hal_gpio_get_pin_input_status(uint32_t pin)
+__attribute__((weak)) uint32_t wiced_hal_gpio_get_pin_input_status(uint32_t pin)
 {
     return 0;
 }
 
 
-void wiced_hal_gpio_register_pin_for_interrupt(uint16_t pin,
+__attribute__((weak)) void wiced_hal_gpio_register_pin_for_interrupt(uint16_t pin,
         void (*userfn)(void*, uint8_t), void* userdata)
 {
     return;

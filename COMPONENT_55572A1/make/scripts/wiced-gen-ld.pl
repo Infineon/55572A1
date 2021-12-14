@@ -335,8 +335,22 @@ sub main
                 #printf("%s\n", $stringtable->{$section->{sh_name}}) if defined $section->{sh_name};
                 $section->{name} = $stringtable->{$section->{sh_name}};
             }
-            $section_lut->{$section->{name}} = $section;
-            #printf "section %s: start 0x%x len 0x%x\n", $section->{name}, $section->{sh_addr}, $section->{sh_size};
+            if(defined $section_lut->{$section->{name}}) {
+                # if already defined, merge it's limits with previous (case for MPAF_SRAM_AREA)
+                $section_lut->{$section->{name}}->{sh_addr} = $section->{sh_addr} if
+                    $section_lut->{$section->{name}}->{sh_addr} > $section->{sh_addr};
+                $section_lut->{$section->{name}}->{sh_size} = $section->{sh_size} if
+                    $section_lut->{$section->{name}}->{sh_size} < $section->{sh_size};
+            }
+            else {
+                $section_lut->{$section->{name}} = $section;
+                #printf "section %s: start 0x%x len 0x%x\n", $section->{name}, $section->{sh_addr}, $section->{sh_size};
+            }
+        }
+        my $gp_wiced_app_pre_init_cfg_sym = find_symbol($symbol_entries, "gp_wiced_app_pre_init_cfg");
+        if(defined $gp_wiced_app_pre_init_cfg_sym)
+        {
+            $section_lut->{APP_PRE_INIT_CFG} = { sh_addr => $gp_wiced_app_pre_init_cfg_sym->{st_value} };
         }
     }
 	elsif(defined $param->{sym}) {
@@ -406,7 +420,8 @@ sub output_ld
         }
 
         if (defined($param->{SRAM_LENGTH})) {
-            $ram_start = $mpaf_data_area_section->{sh_addr} - $param->{SRAM_LENGTH};
+            # avoid loading right up to $mpaf_data_area_section
+            $ram_start = $mpaf_data_area_section->{sh_addr} - $param->{SRAM_LENGTH} - 1;
             # Round down to 32-byte
             $ram_start &= ~0x0000001f;
         }

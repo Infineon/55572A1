@@ -33,7 +33,7 @@
 
 /** @file
  *
- *  WICED Generic Attribute (GATT) Application Programming Interface
+ *  AIROC Generic Attribute (GATT) Application Programming Interface
  */
 #pragma once
 
@@ -94,7 +94,7 @@ enum wiced_bt_gatt_status_e
 	WICED_BT_GATT_VALUE_NOT_ALLOWED          = 0x13,         /**< Value Not allowed */
 
                                                              /* 0xE0 ~ 0xFB reserved for future use */
-                                                             /* WICED defined status  */
+                                                             /* AIROC defined status  */
     WICED_BT_GATT_ILLEGAL_PARAMETER          = 0x8780,         /**< Illegal Parameter */
     WICED_BT_GATT_NO_RESOURCES               = 0x8781,         /**< No Resources */
     WICED_BT_GATT_INTERNAL_ERROR             = 0x8783,         /**< Internal Error */
@@ -1003,10 +1003,10 @@ extern "C"
  */
 
 /**
- * BLE (Bluetooth Low Energy) Specific functions.
+ * LE (Bluetooth Low Energy) Specific functions.
  *
  * @if DUAL_MODE
- * @addtogroup gatt_le BLE (Bluetooth Low Energy)
+ * @addtogroup gatt_le LE (Bluetooth Low Energy)
  * @ingroup gatt_common_api
  * @endif
  */
@@ -1398,7 +1398,7 @@ void wiced_bt_gatt_set_peer_caching_status(uint16_t conn_id, wiced_bt_gatt_cachi
  *  @return @link wiced_bt_gatt_status_e wiced_bt_gatt_status_t @endlink
  *  @ingroup gatt_client_api_functions
 
- *  @note Allowed mtu range is 23 upto \ref wiced_bt_cfg_ble_t.ble_max_rx_pdu_size for BLE links as configured in #wiced_bt_cfg_settings_t
+ *  @note Allowed mtu range is 23 upto \ref wiced_bt_cfg_ble_t.ble_max_rx_pdu_size for LE links as configured in #wiced_bt_cfg_settings_t
  *
 */
 wiced_bt_gatt_status_t wiced_bt_gatt_client_configure_mtu (uint16_t conn_id, uint16_t mtu);

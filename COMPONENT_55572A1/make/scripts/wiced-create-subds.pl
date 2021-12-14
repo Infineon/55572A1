@@ -233,7 +233,11 @@ sub main
         exit -1 if (create_full_hcd_file($SETTINGS{&DST_HCD_SUB_DS}) == ERROR_FATAL);
     }
 
-    exit -1 if (create_mdh_file($SETTINGS{&SRC_SEC_XIP_MDH_FILE}, $SETTINGS{&DST_MDH_FILE})== ERROR_FATAL);
+    if (defined($SETTINGS{&SRC_SEC_XIP_MDH_FILE})
+         && defined($SETTINGS{&DST_MDH_FILE}))
+    {
+        exit -1 if (create_mdh_file($SETTINGS{&SRC_SEC_XIP_MDH_FILE}, $SETTINGS{&DST_MDH_FILE})== ERROR_FATAL);
+    }
 
     return 0;
 }

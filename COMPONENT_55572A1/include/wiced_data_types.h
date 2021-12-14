@@ -37,16 +37,17 @@
 #include <string.h>
 
 /**
- *  @ingroup     gentypes
+ *  @defgroup     gentypes   Common Bluetooth types
+ *  @ingroup wicedbt
  *
  *  @{
  */
 
 #ifndef WICED_FALSE
-#define WICED_FALSE 0   /**< Wiced false */
+#define WICED_FALSE 0   /**< false */
 #endif // !WICED_FALSE
 #ifndef WICED_TRUE
-#define WICED_TRUE  1   /**< Wiced true */
+#define WICED_TRUE  1   /**< true */
 #endif // !WICED_TRUE
 
 #ifndef FALSE
@@ -78,12 +79,12 @@
 #endif
 
 /* To prevent complier to optimize with LDM and STM instructions */
-#define WICED_MEMCPY(a, b, c)       memcpy((void*)(a), (const void*)(b), c)     /**< Wiced Memory copy*/
-#define WICED_MEMSET(a, b, c)       memset((void*)(a), b, c)                    /**< Wiced Memory set */
-#define WICED_MEMMOVE(a, b, c)      memmove((void*)(a), (const void*)(b), c)    /**< Wiced Memory move*/
-#define WICED_MEMCMP(a, b, c)       memcmp((void*)(a), (const void*)(b), c)     /**< Wiced Memory compare*/
+#define WICED_MEMCPY(a, b, c)       memcpy((void*)(a), (const void*)(b), c)     /**< Memory copy*/
+#define WICED_MEMSET(a, b, c)       memset((void*)(a), b, c)                    /**< Memory set */
+#define WICED_MEMMOVE(a, b, c)      memmove((void*)(a), (const void*)(b), c)    /**< Memory move*/
+#define WICED_MEMCMP(a, b, c)       memcmp((void*)(a), (const void*)(b), c)     /**< Memory compare*/
 
-/** Wiced Boolean */
+/** Boolean */
 typedef unsigned int   wiced_bool_t;
 
 /** Function prototypes to lock and unlock (typically using a mutex). The context

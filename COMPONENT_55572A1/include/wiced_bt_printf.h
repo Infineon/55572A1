@@ -58,7 +58,7 @@
 typedef enum
 {
     WICED_ROUTE_DEBUG_NONE  =  0x00, /**< No traces */
-    WICED_ROUTE_DEBUG_TO_WICED_UART, /**< send debug strings in formatted WICED HCI messages over HCI UART to ClientControl or MCU */
+    WICED_ROUTE_DEBUG_TO_WICED_UART, /**< send debug strings in formatted AIROC HCI messages over HCI UART to ClientControl or MCU */
     WICED_ROUTE_DEBUG_TO_HCI_UART,   /**< send debug strings as plain text to HCI UART, used by default if wiced_set_debug_uart() not called */
     WICED_ROUTE_DEBUG_TO_DBG_UART,   /**< Deprecated */
     WICED_ROUTE_DEBUG_TO_PUART       /**< send debug strings as plain text to the peripheral uart (PUART) */
@@ -84,10 +84,22 @@ void wiced_bt_trace_enable(void);
  */
 void wiced_set_debug_uart ( wiced_debug_uart_types_t uart );
 
+/**
+ * Function         wiced_set_debug_uart_baudrate
+ *
+ * It configures the value for wiced_set_debug_uart.
+ *
+ * @param[in]      baudrate        : baudrate to be used
+ *
+ * @return          void
+ *
+ * @note To reflect the configured baudrate, wiced_set_debug_uart API should be invoked
+ */
+void wiced_set_debug_uart_baudrate ( uint32_t baudrate );
+
 /* @} */
 
 extern void wiced_print_trace(char* p_trace_buf, int trace_buf_len, wiced_bt_trace_type_t trace_type);
-extern void wiced_bt_trace_array( const char *string, const uint8_t* array, const uint16_t len );
 extern void wiced_trace_array( const uint8_t* p_array, uint16_t len);
 extern wiced_debug_uart_types_t wiced_get_debug_uart ( void );
 

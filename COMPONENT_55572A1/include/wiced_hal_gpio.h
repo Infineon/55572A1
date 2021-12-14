@@ -64,8 +64,8 @@
 /// Pin output config
 typedef enum
 {
-    WICED_GPIO_PIN_OUTPUT_LOW,
-    WICED_GPIO_PIN_OUTPUT_HIGH,
+    GPIO_PIN_OUTPUT_LOW,
+    GPIO_PIN_OUTPUT_HIGH,
 } WICED_GPIO_PIN_OUTPUT_CONFIG;
 
 /// The following enum defines the constant values for the GPIO driver and
@@ -74,109 +74,165 @@ enum
 {
     /// Trigger Type
     /// GPIO configuration bit 0, Interrupt type defines
-    WICED_GPIO_EDGE_TRIGGER_MASK       = 0x0001,
-    WICED_GPIO_EDGE_TRIGGER            = 0x0001,
-    WICED_GPIO_LEVEL_TRIGGER           = 0x0000,
+    GPIO_EDGE_TRIGGER_MASK       = 0x0001,
+    GPIO_EDGE_TRIGGER            = 0x0001,
+    GPIO_LEVEL_TRIGGER           = 0x0000,
 
     /// Negative Edge Triggering
     /// GPIO configuration bit 1, Interrupt polarity defines
-    WICED_GPIO_TRIGGER_POLARITY_MASK   = 0x0002,
-    WICED_GPIO_TRIGGER_NEG             = 0x0002,
+    GPIO_TRIGGER_POLARITY_MASK   = 0x0002,
+    GPIO_TRIGGER_NEG             = 0x0002,
 
     /// Dual Edge Triggering
     /// GPIO configuration bit 2, single/dual edge defines
-    WICED_GPIO_DUAL_EDGE_TRIGGER_MASK  = 0x0004,
-    WICED_GPIO_EDGE_TRIGGER_BOTH       = 0x0004,
-    WICED_GPIO_EDGE_TRIGGER_SINGLE     = 0x0000,
+    GPIO_DUAL_EDGE_TRIGGER_MASK  = 0x0004,
+    GPIO_EDGE_TRIGGER_BOTH       = 0x0004,
+    GPIO_EDGE_TRIGGER_SINGLE     = 0x0000,
 
 
     /// Interrupt Enable
     /// GPIO configuration bit 3, interrupt enable/disable defines
-    WICED_GPIO_INTERRUPT_ENABLE_MASK   = 0x0008,
-    WICED_GPIO_INTERRUPT_ENABLE        = 0x0008,
-    WICED_GPIO_INTERRUPT_DISABLE       = 0x0000,
+    GPIO_INTERRUPT_ENABLE_MASK   = 0x0008,
+    GPIO_INTERRUPT_ENABLE        = 0x0008,
+    GPIO_INTERRUPT_DISABLE       = 0x0000,
 
 
     /// Interrupt Config
     /// GPIO configuration bit 0:3, Summary of Interrupt enabling type
-    WICED_GPIO_EN_INT_MASK             = WICED_GPIO_EDGE_TRIGGER_MASK | WICED_GPIO_TRIGGER_POLARITY_MASK | WICED_GPIO_DUAL_EDGE_TRIGGER_MASK | WICED_GPIO_INTERRUPT_ENABLE_MASK,
-    WICED_GPIO_EN_INT_LEVEL_HIGH       = WICED_GPIO_INTERRUPT_ENABLE | WICED_GPIO_LEVEL_TRIGGER,
-    WICED_GPIO_EN_INT_LEVEL_LOW        = WICED_GPIO_INTERRUPT_ENABLE | WICED_GPIO_LEVEL_TRIGGER | WICED_GPIO_TRIGGER_NEG,
-    WICED_GPIO_EN_INT_RISING_EDGE      = WICED_GPIO_INTERRUPT_ENABLE | WICED_GPIO_EDGE_TRIGGER,
-    WICED_GPIO_EN_INT_FALLING_EDGE     = WICED_GPIO_INTERRUPT_ENABLE | WICED_GPIO_EDGE_TRIGGER | WICED_GPIO_TRIGGER_NEG,
-    WICED_GPIO_EN_INT_BOTH_EDGE        = WICED_GPIO_INTERRUPT_ENABLE | WICED_GPIO_EDGE_TRIGGER | WICED_GPIO_EDGE_TRIGGER_BOTH,
+    GPIO_EN_INT_MASK             = GPIO_EDGE_TRIGGER_MASK | GPIO_TRIGGER_POLARITY_MASK | GPIO_DUAL_EDGE_TRIGGER_MASK | GPIO_INTERRUPT_ENABLE_MASK,
+    GPIO_EN_INT_LEVEL_HIGH       = GPIO_INTERRUPT_ENABLE | GPIO_LEVEL_TRIGGER,
+    GPIO_EN_INT_LEVEL_LOW        = GPIO_INTERRUPT_ENABLE | GPIO_LEVEL_TRIGGER | GPIO_TRIGGER_NEG,
+    GPIO_EN_INT_RISING_EDGE      = GPIO_INTERRUPT_ENABLE | GPIO_EDGE_TRIGGER,
+    GPIO_EN_INT_FALLING_EDGE     = GPIO_INTERRUPT_ENABLE | GPIO_EDGE_TRIGGER | GPIO_TRIGGER_NEG,
+    GPIO_EN_INT_BOTH_EDGE        = GPIO_INTERRUPT_ENABLE | GPIO_EDGE_TRIGGER | GPIO_EDGE_TRIGGER_BOTH,
 
 
     /// GPIO Output Buffer Control and Output Value Multiplexing Control
     /// GPIO configuration bit 4:5, and 14 output enable control and
     /// muxing control
-    WICED_GPIO_INPUT_ENABLE            = 0x0000,
-    WICED_GPIO_OUTPUT_DISABLE          = 0x0000,
-    WICED_GPIO_OUTPUT_ENABLE           = 0x4000,
-    WICED_GPIO_KS_OUTPUT_ENABLE        = 0x0001, //Keyscan Output enable
-    WICED_GPIO_OUTPUT_FN_SEL_MASK      = 0x0000,
-    WICED_GPIO_OUTPUT_FN_SEL_SHIFT     = 0,
+    GPIO_INPUT_ENABLE            = 0x0000,
+    GPIO_OUTPUT_DISABLE          = 0x0000,
+    GPIO_OUTPUT_ENABLE           = 0x4000,
+    GPIO_KS_OUTPUT_ENABLE        = 0x0001, //Keyscan Output enable
+    GPIO_OUTPUT_FN_SEL_MASK      = 0x0000,
+    GPIO_OUTPUT_FN_SEL_SHIFT     = 0,
 
 
     /// Global Input Disable
     /// GPIO configuration bit 6, "Global_input_disable" Disable bit
     /// This bit when set to "1" , P0 input_disable signal will control
     /// ALL GPIOs. Default value (after power up or a reset event) is "0".
-    WICED_GPIO_GLOBAL_INPUT_ENABLE     = 0x0000,
-    WICED_GPIO_GLOBAL_INPUT_DISABLE    = 0x0040,
+    GPIO_GLOBAL_INPUT_ENABLE     = 0x0000,
+    GPIO_GLOBAL_INPUT_DISABLE    = 0x0040,
 
 
     /// Pull-up/Pull-down
     /// GPIO configuration bit 9 and bit 10, pull-up and pull-down enable
     /// Default value is [0,0]--means no pull resistor.
-    WICED_GPIO_PULL_UP_DOWN_NONE       = 0x0000,   //[0,0]
-    WICED_GPIO_PULL_UP                 = 0x0400,   //[1,0]
-    WICED_GPIO_PULL_DOWN               = 0x0200,   //[0,1]
-    WICED_GPIO_INPUT_DISABLE           = 0x0600,   //[1,1] // input disables the GPIO
+    GPIO_PULL_UP_DOWN_NONE       = 0x0000,   //[0,0]
+    GPIO_PULL_UP                 = 0x0400,   //[1,0]
+    GPIO_PULL_DOWN               = 0x0200,   //[0,1]
+    GPIO_INPUT_DISABLE           = 0x0600,   //[1,1] // input disables the GPIO
 
-    /// Drive Strength
+    /// Drive Strength (not for ARM gpio's)
     /// GPIO configuration bit 11
-    WICED_GPIO_DRIVE_SEL_MASK         = 0x0800,
-    WICED_GPIO_DRIVE_SEL_LOWEST       = 0x0000,  // 2mA @ 1.8V
-    WICED_GPIO_DRIVE_SEL_MIDDLE_0     = 0x0000,  // 4mA @ 3.3v
-    WICED_GPIO_DRIVE_SEL_MIDDLE_1     = 0x0800,  // 4mA @ 1.8v
-    WICED_GPIO_DRIVE_SEL_HIGHEST      = 0x0800,  // 8mA @ 3.3v
+    GPIO_DRIVE_SEL_MASK         = 0x0800,
+    GPIO_DRIVE_SEL_LOWEST       = 0x0000,  // 2mA @ 1.8V
+    GPIO_DRIVE_SEL_MIDDLE_0     = 0x0000,  // 4mA @ 3.3v
+    GPIO_DRIVE_SEL_MIDDLE_1     = 0x0800,  // 4mA @ 1.8v
+    GPIO_DRIVE_SEL_HIGHEST      = 0x0800,  // 8mA @ 3.3v
 
 
     /// Input Hysteresis
     /// GPIO configuration bit 13, hysteresis control
-    WICED_GPIO_HYSTERESIS_MASK         = 0x2000,
-    WICED_GPIO_HYSTERESIS_ON           = 0x2000,
-    WICED_GPIO_HYSTERESIS_OFF          = 0x0000,
+    GPIO_HYSTERESIS_MASK         = 0x2000,
+    GPIO_HYSTERESIS_ON           = 0x2000,
+    GPIO_HYSTERESIS_OFF          = 0x0000,
+
+    /// ARM GPIO Drive strength bit 23,21 and 20
+    /// 30th bit, 1 to configure, 0 to default [16MA and 1.8V]
+    /// Note: only for ARM gpios. Below config not applicable for LHL
+    GPIO_ARM_DRIVE_SEL_02MA      = 0X40000000, // 2MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_04MA      = 0X40100000, // 4MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_06MA      = 0X40200000, // 6MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_08MA      = 0X40300000, // 8MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_10MA      = 0X40800000, // 10MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_12MA      = 0X40900000, // 12MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_14MA      = 0X40A00000, // 14MA and 1.8V
+    GPIO_ARM_DRIVE_SEL_16MA      = 0X40B00000, // 16MA and 1.8V
 };
 
-typedef enum wiced_bt_gpio_numbers
+// GPIO Numbers : last 8 are ARM GPIOs and rest are LHL GPIOs */
+typedef enum
 {
-    BT_DEV_WAKE = 0,
-    BT_HOST_WAKE = 1,
-    BT_GPIO_2 = 2,
-    BT_GPIO_3 = 3,
-    BT_GPIO_4 = 4,
-    BT_GPIO_5 = 5,
-    BT_GPIO_6 = 6,
-    BT_GPIO_7 = 7,
-    BT_GPIO_8 = 8,
-    BT_GPIO_9 = 9,
-    BT_GPIO_10 = 10,
-    BT_GPIO_11 = 11,
-    BT_GPIO_12 = 12,
-    BT_GPIO_13 = 13,
-    BT_GPIO_14 = 14,
-    BT_GPIO_15 = 15,
-    BT_GPIO_16 = 16,
-    BT_GPIO_17 = 17,
-    BT_GPIO_18 = 18,
-    BT_GPIO_19 = 19,
-    BT_GPIO_20 = 20,
-    BT_DMIC_CK = 21,
-    BT_DMIC_DQ = 22,
-    MAX_NUM_OF_GPIO,
-} wiced_bt_gpio_numbers_t;
+    /* GPIO_P00 to GPIO_P39 are LHL GPIOs */
+    WICED_P00 = 0,  /* LHL GPIO 0 */
+    WICED_P01,      /* LHL GPIO 1 */
+    WICED_P02,      /* LHL GPIO 2 */
+    WICED_P03,      /* LHL GPIO 3 */
+    WICED_P04,      /* LHL GPIO 4 */
+    WICED_P05,      /* LHL GPIO 5 */
+    WICED_P06,      /* LHL GPIO 6 */
+    WICED_P07,      /* LHL GPIO 7 */
+    WICED_P08,      /* LHL GPIO 8 */
+    WICED_P09,      /* LHL GPIO 9 */
+    WICED_P10,      /* LHL GPIO 10 */
+    WICED_P11,      /* LHL GPIO 11 */
+    WICED_P12,      /* LHL GPIO 12 */
+    WICED_P13,      /* LHL GPIO 13 */
+    WICED_P14,      /* LHL GPIO 14 */
+    WICED_P15,      /* LHL GPIO 15 */
+    WICED_P16,      /* LHL GPIO 16 */
+    WICED_P17,      /* LHL GPIO 17 */
+    WICED_P18,      /* LHL GPIO 18 */
+    WICED_P19,      /* LHL GPIO 19 */
+    WICED_P20,      /* LHL GPIO 20 */
+    WICED_P21,      /* LHL GPIO 21 */
+    WICED_P22,      /* LHL GPIO 22 */
+    WICED_P23,      /* LHL GPIO 23 */
+    WICED_P24,      /* LHL GPIO 24 */
+    WICED_P25,      /* LHL GPIO 25 */
+    WICED_P26,      /* LHL GPIO 26 */
+    WICED_P27,      /* LHL GPIO 27 */
+    WICED_P28,      /* LHL GPIO 28 */
+    WICED_P29,      /* LHL GPIO 29 */
+    WICED_P30,      /* LHL GPIO 30 */
+    WICED_P31,      /* LHL GPIO 31 */
+    WICED_P32,      /* LHL GPIO 32 */
+    WICED_P33,      /* LHL GPIO 33 */
+    WICED_P34,      /* LHL GPIO 34 */
+    WICED_P35,      /* LHL GPIO 35 */
+    WICED_P36,      /* LHL GPIO 36 */
+    WICED_P37,      /* LHL GPIO 37 */
+    WICED_P38,      /* LHL GPIO 38 */
+    WICED_P39,      /* LHL GPIO 39 */
+    /* WICED_GPIO_00 to WICED_GPIO_23 are ARM GPIOs */
+    WICED_GPIO_00,   /* ARM GPIO 0 - 40 */
+    WICED_GPIO_01,   /* ARM GPIO 1 - 41 */
+    WICED_GPIO_02,   /* ARM GPIO 2 - 42 */
+    WICED_GPIO_03,   /* ARM GPIO 3 - 43 */
+    WICED_GPIO_04,   /* ARM GPIO 4 - 44 */
+    WICED_GPIO_05,   /* ARM GPIO 5 - 45 */
+    WICED_GPIO_06,   /* ARM GPIO 6 - 46 */
+    WICED_GPIO_07,   /* ARM GPIO 7 - 47 */
+    WICED_GPIO_08,   /* ARM GPIO 8 - 48 */
+    WICED_GPIO_09,   /* ARM GPIO 9 - 49 */
+    WICED_GPIO_10,   /* ARM GPIO 10 - 50 */
+    WICED_GPIO_11,   /* ARM GPIO 11 - 51 */
+    WICED_GPIO_12,   /* ARM GPIO 12 - 52 */
+    WICED_GPIO_13,   /* ARM GPIO 13 - 53 */
+    WICED_GPIO_14,   /* ARM GPIO 14 - 54 */
+    WICED_GPIO_15,   /* ARM GPIO 15 - 55 */
+    WICED_GPIO_16,   /* ARM GPIO 16 - 56 */
+    WICED_GPIO_17,   /* ARM GPIO 17 - 57 */
+    WICED_GPIO_18,   /* ARM GPIO 18 - 58 */
+    WICED_GPIO_19,   /* ARM GPIO 19 - 59 */
+    WICED_GPIO_20,   /* ARM GPIO 20 - 60 */
+    WICED_GPIO_21,   /* ARM GPIO 21 - 61 */
+    WICED_GPIO_22,   /* ARM GPIO 22 - 62 */
+    WICED_GPIO_23,   /* ARM GPIO 23 - 63 */
+    MAX_NUM_OF_GPIO
+}wiced_bt_gpio_numbers_t;
 
 //! possible functions to be brought out through LHL GPIO's
 typedef enum
@@ -272,6 +328,71 @@ typedef enum
     WICED_TX_FSM = 128,
     WICED_RX_FSM,
     WICED_RX_PU,
+    /* WICED_ARM_GPIO_0 to WICED_ARM_DMIC_DQ are ARM GPIOs functionalies */
+    WICED_ARM_GPIO_0,
+    WICED_ARM_GPIO_1,
+    WICED_ARM_GPIO_2,
+    WICED_ARM_GPIO_3,
+    WICED_ARM_GPIO_4,
+    WICED_ARM_GPIO_5,
+    WICED_ARM_GPIO_6,
+    WICED_ARM_GPIO_7,
+    WICED_ARM_A_GPIO_0,
+    WICED_ARM_A_GPIO_1,
+    WICED_ARM_A_GPIO_2,
+    WICED_ARM_A_GPIO_3,
+    WICED_ARM_A_GPIO_4,
+    WICED_ARM_A_GPIO_5,
+    WICED_ARM_A_GPIO_6,
+    WICED_ARM_A_GPIO_7,
+    WICED_ARM_PCM_IN,
+    WICED_ARM_PCM_OUT,
+    WICED_ARM_PCM_SYNC,
+    WICED_ARM_PCM_CLK,
+    WICED_ARM_SCB0_UART_RTS,
+    WICED_ARM_SCB0_UART_CTS,
+    WICED_ARM_SCB0_UART_RXD,
+    WICED_ARM_SCB0_UART_TXD,
+    WICED_ARM_SCB0_SPI_SELECT0,
+    WICED_ARM_SCB0_SPI_SELECT1,
+    WICED_ARM_SCB0_SPI_SELECT2,
+    WICED_ARM_SCB0_SPI_SELECT3,
+    WICED_ARM_SCB0_SPI_MOSI,
+    WICED_ARM_SCB0_SPI_MISO,
+    WICED_ARM_SCB0_SPI_CLK,
+    WICED_ARM_SCB0_SCL,
+    WICED_ARM_SCB0_SDA,
+    WICED_ARM_SCB1_UART_RTS,
+    WICED_ARM_SCB1_UART_CTS,
+    WICED_ARM_SCB1_UART_RXD,
+    WICED_ARM_SCB1_UART_TXD,
+    WICED_ARM_SCB1_SPI_SELECT0,
+    WICED_ARM_SCB1_SPI_SELECT1,
+    WICED_ARM_SCB1_SPI_SELECT2,
+    WICED_ARM_SCB1_SPI_SELECT3,
+    WICED_ARM_SCB1_SPI_MOSI,
+    WICED_ARM_SCB1_SPI_MISO,
+    WICED_ARM_SCB1_SPI_CLK,
+    WICED_ARM_SCB1_SCL,
+    WICED_ARM_SCB1_SDA,
+    WICED_ARM_TCPWM_TR_ALL_1,
+    WICED_ARM_TCPWM_TR_ALL_2,
+    WICED_ARM_TCPWM_TR_ALL_3,
+    WICED_ARM_TCPWM_TR_ALL_4,
+    WICED_ARM_TCPWM_OUT_11,
+    WICED_ARM_TCPWM_OUT_12,
+    WICED_ARM_TCPWM_OUT_21,
+    WICED_ARM_TCPWM_OUT_22,
+    WICED_ARM_I2S_MASTER_CLK,
+    WICED_ARM_I2S_MASTER_WS,
+    WICED_ARM_I2S_MASTER_DO,
+    WICED_ARM_I2S_MASTER_DI,
+    WICED_ARM_I2S_SLAVE_CLK,
+    WICED_ARM_I2S_SLAVE_WS,
+    WICED_ARM_I2S_SLAVE_DO,
+    WICED_ARM_I2S_SLAVE_DI,
+    WICED_ARM_DMIC_CK,
+    WICED_ARM_DMIC_DQ,
     WICED_UNAVAILABLE = 0xFF
 } wiced_bt_gpio_function_t;
 
@@ -351,7 +472,7 @@ void wiced_hal_gpio_configure_pin(uint32_t pin, uint32_t config,
 ///
 /// \return Configuration of specified pin.
 ///////////////////////////////////////////////////////////////////////////////
-uint16_t wiced_hal_gpio_get_pin_config(uint32_t pin);
+uint32_t wiced_hal_gpio_get_pin_config(uint32_t pin);
 
 ///////////////////////////////////////////////////////////////////////////////
 /// Sets the output value of a pin. Note that the pin must already be

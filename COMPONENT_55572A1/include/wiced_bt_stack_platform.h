@@ -37,6 +37,7 @@
  */
  /**
  * @addtogroup  wiced_bt_platform_group Bluetooth Stack Platform Interface
+ * @ingroup wicedbt
  *
  * Interface between Stack and platform.
  *
@@ -51,7 +52,7 @@
 #include "wiced_bt_cfg.h"
 #include "wiced_bt_dev.h"
 
-/** Wiced BT Stack Platform */
+/** AIROC Bluetooth Stack Platform */
 typedef struct
 {
     /**
@@ -247,7 +248,7 @@ extern wiced_result_t wiced_bt_stack_platform_initialize(wiced_bt_stack_platform
  * @return   <b> WICED_BT_SUCCESS </b> : on success; \n
  *           <b> WICED_BT_ERROR  </b>  : if an error occurred
  *
- * @note : After calling this API, DON'T call any BT API without calling #wiced_bt_stack_platform_initialize again.
+ * @note : After calling this API, DON'T call any Bluetooth API without calling #wiced_bt_stack_platform_initialize again.
  */
 extern wiced_result_t wiced_bt_stack_platform_deinit(void);
 
@@ -347,7 +348,7 @@ typedef wiced_bool_t (*wiced_bt_internal_stack_evt_handler_cb)(uint8_t* p_event)
 /**
 * Internal stack init
 *
-* @param[in] mgmt_cback : Application BT Management callback
+* @param[in] mgmt_cback : Application Bluetooth Management callback
 * @param[in] post_stack_cb : Internal post stack init callback
 * @param[in] evt_handler_cb : Internal stack event handler
 *

@@ -66,7 +66,7 @@ CY_MODUS_SHELL_DIR_BWC:=$(CY_INTERNAL_TOOLS)/$(CY_TOOL_modus-shell_BASE)
 #
 
 # create a RAM download image *.hcd
-DIRECT_LOAD?=0
+DIRECT_LOAD?=1
 ifeq ($(DIRECT_LOAD),1)
 CY_CORE_DIRECT_LOAD=_DIRECT_
 CY_CORE_CGS_ARGS+=-O DLConfigSSLocation:$(PLATFORM_DIRECT_LOAD_BASE_ADDR)
@@ -138,9 +138,9 @@ CY_CORE_DEFINES+=\
 
 CY_CORE_EXTRA_DEFINES=\
     -DWICED_SDK_MAJOR_VER=3 \
-    -DWICED_SDK_MINOR_VER=1 \
+    -DWICED_SDK_MINOR_VER=2 \
     -DWICED_SDK_REV_NUMBER=0 \
-    -DWICED_SDK_BUILD_NUMBER=17479
+    -DWICED_SDK_BUILD_NUMBER=20467
 
 #
 # Set the output file paths
@@ -160,7 +160,7 @@ CY_SUPPORTED_TOOL_TYPES+=bt-configurator
 endif
 
 # hint for bt-configurator
-CY_OPEN_bt_configurator_DEVICE=--device 20xxx
+CY_OPEN_bt_configurator_DEVICE=--device CYW55xxx
 
 # application-specific tools
 ifneq ($(CY_OS_DIR),Windows)

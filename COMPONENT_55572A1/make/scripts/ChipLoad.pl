@@ -169,22 +169,8 @@ else
         qx{"$chip_load" -BLUETOOLMODE -PORT $com_port -BAUDRATE $detected_baud -BTP "${btp_file}" -NOERASE -CONFIG ${config_file} -LOGTO "$download_log_path" ${addl_flags}};
     }
     else {
-        #print "$chip_load -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP ${btp_file} -FIRMWARE ${mini_driver} ${addl_flags}\n";
-        qx{"$chip_load" -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP "${btp_file}" -FIRMWARE ${mini_driver} -LOGTO "$download_log_path" ${addl_flags}};
-
-        open(my $DOWNLOAD_LOG, "<", $download_log_path) or die "Could not open file: $!";
-        while (<$DOWNLOAD_LOG>) {
-            $detected_baud = $1 if /baudrate\s+(\d+)/;
-        }
-        close $DOWNLOAD_LOG;
-
-        $addl_flags .= ' -NOHCIRESET';
-
-        # Minidriver supports to UpdateBaudrate from CYW55560A0_001.001.006.0039
-        $addl_flags .= ' -REBAUDRATE 3000000';
-
-        #print "$chip_load -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP $btp_file -FIRMWARE $config_file ${addl_flags}\n";
-        qx{"$chip_load" -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP "${btp_file}" -FIRMWARE ${config_file} -LOGTO "$download_log_path" ${addl_flags}};
+        #print "$chip_load -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP ${btp_file} -CONFIG $config_file ${addl_flags}\n";
+        qx{"$chip_load" -BLUETOOLMODE -PORT $com_port -LAUNCHADDRESS 0x00000000 -BAUDRATE $detected_baud -NOVERIFY -BTP "${btp_file}" -CONFIG ${config_file} -LOGTO "$download_log_path" ${addl_flags}};
     }
 	exit ($? >> 8);
 }

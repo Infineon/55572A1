@@ -44,6 +44,7 @@
 /**
  * @cond DUAL_MODE
  * @addtogroup  sdp     Service Discovery Protocol (SDP)
+ * @ingroup wicedbt
  *
  * The Service Discovery Protocol (SDP) allows a device to discover services offered by other devices, and
  * their associated parameters. For example, when you use a mobile phone with a Bluetooth headset, the phone
@@ -325,7 +326,7 @@ typedef struct
 #define SDP_ATTR_SERVICE_AVAILABILITY(availability)                     \
         SDP_ATTR_UINT1(ATTR_ID_SERVICE_AVAILABILITY, availability)
 
-/** BT Profile Descriptor List 0x0009 */
+/** Bluetooth Profile Descriptor List 0x0009 */
 #define SDP_ATTR_PROFILE_DESC_LIST(uuid, version)                       \
     SDP_ATTR_ID(ATTR_ID_BT_PROFILE_DESC_LIST), SDP_ATTR_SEQUENCE_1(8),  \
         SDP_ATTR_SEQUENCE_1(6),                                         \
@@ -389,8 +390,7 @@ extern "C"
 
 /**
  *
- * Initialize local SDP server database (database generated using
- * WICED BT Designer)
+ * Initialize local SDP server database
  *
  * @param[in]       p_sdp_db:    First element in database array
  * @param[in]       size:        size (in bytes) of SDP database

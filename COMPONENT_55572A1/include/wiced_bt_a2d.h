@@ -42,7 +42,7 @@
 /**
  * @cond DUAL_MODE
  * @addtogroup  wicedbt_av_a2d_helper      Helper Functions
- * @ingroup     wicedbt_avdt
+ * @ingroup     wicedbt_a2dp
  *
  * @{
  */

@@ -33,7 +33,7 @@
 
 /** @file
  *
- * WICED Bluetooth Low Energy (BLE) Ischoronous function
+ * AIROC Bluetooth Low Energy (LE) Isochronous function
  *
  *  Some Acronyms and Abbreviations :
  *      CIS   -  Connected Isochronous Stream
@@ -47,7 +47,8 @@
 #include "wiced_bt_types.h"
 
 /**
- * @defgroup  wicedbt_isoc        Ischoronous (ISOC)
+ * @defgroup  wicedbt_isoc        Isochronous (ISOC)
+ * @ingroup wicedbt
  *
  * This section describes the API's to use ISOC functionality.
  *
@@ -276,10 +277,10 @@ typedef void wiced_ble_isoc_cback_t(wiced_bt_ble_isoc_event_t event, wiced_bt_bl
 /** @} wicedbt_isoc_defs         */
 
 /**
- * @addtogroup  wicedbt_isoc_functions   Ischoronous (ISOC) functions
+ * @addtogroup  wicedbt_isoc_functions   Isochronous (ISOC) functions
  * @ingroup     wicedbt_isoc
  *
- * Ischoronous(ISOC) Functions.
+ * Isochronous (ISOC) Functions.
  *
  * @{
  */

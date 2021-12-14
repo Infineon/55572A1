@@ -45,7 +45,7 @@ extern "C" {
 #endif
 
 /******************************************************
- * @cond      Macros
+ * Macros
  ******************************************************/
 
 #ifndef RESULT_ENUM
@@ -53,16 +53,16 @@ extern "C" {
 #endif /* ifndef RESULT_ENUM */
 
 /**
- *  @addtogroup  WICED Result list       WICED result list
- *  @ingroup     gentypes
+ *  @addtogroup  Result             AIROC Result Codes
+ *  @ingroup     wicedsys
  *
- *  <b> WICED Result list </b> for Bluetooth BR/EDR and LE @b .
+ *  <b> AIROC Result list </b> for Bluetooth BR/EDR and LE @b .
  *
  *  @{
  */
 /*************************************************************************/
 
-/** WICED result list */
+/** AIROC result list */
 #define WICED_RESULT_LIST( prefix ) \
     RESULT_ENUM( prefix, SUCCESS,                       0x00 ),   /**< Success */                       \
     RESULT_ENUM( prefix, DELETED                       ,0x01 ),   /**< Deleted */                       \
@@ -134,7 +134,7 @@ extern "C" {
     RESULT_ENUM( prefix, ALREADY_INITIALIZED,           0x42),   /**< Already initialized*/             \
     RESULT_ENUM( prefix, FEATURE_NOT_ENABLED           ,0xFF ),  /**< Feature not enabled */
 
-/**@}  WICED result list */
+/**@}  AIROC result list */
 
 /** File result list */
 #define FILESYSTEM_RESULT_LIST( prefix ) \
@@ -157,30 +157,25 @@ extern "C" {
         RESULT_ENUM( prefix, FILESYSTEM_INVALID,        10016 ),   /**< Filesystem has an unrecoverable error */ \
         RESULT_ENUM( prefix, BLOCK_SIZE_BAD,            10017 ),   /**< Block size is invalid - not a multiple or sub-multiple of DEFAULT_SECTOR_SIZE */
 
-/******************************************************
- * @endcond
- ******************************************************/
-
+/*************************************************************************/
 /**
- *  Common Bluetooth definitions
- *  @defgroup gentypes   Common Bluetooth definitions
- *  @addtogroup  Result       WICED result
- *  @ingroup     gentypes
+ *  @addtogroup  Result       AIROC Result Codes
+ *  @ingroup     wicedsys
  *
- *  <b> Result types </b> See wiced_result.h
+ *  <b> Result types </b> @b .
  *
  *  @{
  */
-
-/** WICED result */
+/*************************************************************************/
+/** AIROC result */
 typedef enum
 {
     WICED_RESULT_LIST ( WICED_ )                 /**< Generic Error */
-    BT_RESULT_LIST      (  WICED_BT_       )     /**< BT specific Error. Range: 8000 - 8999 */
+    BT_RESULT_LIST      (  WICED_BT_       )     /**< Bluetooth specific Error. Range: 8000 - 8999 */
     FILESYSTEM_RESULT_LIST( WICED_FILESYSTEM_ )  /**< 10000 - 10999 */
 } wiced_result_t;
 
-/**@}  WICED Result */
+/**@}  AIROC Result */
 
 /******************************************************
  *            Structures

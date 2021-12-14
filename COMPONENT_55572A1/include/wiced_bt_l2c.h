@@ -43,6 +43,7 @@
 
 /**
  *  @addtogroup    l2cap   Logical Link Control and Adaptation Protocol (L2CAP)
+ *  @ingroup wicedbt
  *
  * Logical Link Control and Adaptation Layer Protocol,
  * referred to as L2CAP, provides connection oriented and
@@ -122,7 +123,7 @@
  ****************************************************************************/
 
 /** Structure for Enhanced Retransmission Mode Options
- *  Refer to Volume 3, Part A, section 5.4 of BT Core specification for details */
+ *  Refer to Volume 3, Part A, section 5.4 of Bluetooth Core specification for details */
 typedef struct
 {
     uint8_t  mode;                 /**< Requested mode of link. @cond DUAL_MODE Refer \ref L2CAP_FCR_MODE "L2CAP FCR mode" @endcond */
@@ -136,7 +137,7 @@ typedef struct
 /** Define a structure to hold the configuration parameters. Since the
 *   parameters are optional, for each parameter there is a boolean to
 *   use to signify its presence or absence.
- *  Refer to Volume 3, Part A, section 5.4 of BT Core specification for details
+ *  Refer to Volume 3, Part A, section 5.4 of Bluetooth Core specification for details
 */
 typedef struct
 {
@@ -931,7 +932,7 @@ uint8_t wiced_bt_l2cap_get_chnl_fcr_mode (uint16_t lcid);
 
 
 /**
- *  @brief          Cancel a pending connection attempt to a BLE device.
+ *  @brief          Cancel a pending connection attempt to a LE device.
  *
  *  @param[in]      rem_bda : BD Address of remote
  *
@@ -941,7 +942,7 @@ wiced_bool_t wiced_bt_l2cap_cancel_ble_connect_req (wiced_bt_device_address_t re
 
 
 /**
- *  @brief          Update BLE connection parameters.
+ *  @brief          Update LE connection parameters.
  *
  *  @param[in]      rem_bdRa    : Remote BD Address
  *  @param[in]      min_int     : Min interval, measured in units of 1.25 ms
@@ -955,7 +956,7 @@ wiced_bool_t wiced_bt_l2cap_update_ble_conn_params (wiced_bt_device_address_t re
 
 
 /**
- *  @brief          Enable or disable updating BLE connection params based on the request from the peer.
+ *  @brief          Enable or disable updating LE connection params based on the request from the peer.
  *
  *  @param[in]      rem_bda: Remote Bd Address
  *  @param[in]      enable: TRUE to enable,FALSE to disable.

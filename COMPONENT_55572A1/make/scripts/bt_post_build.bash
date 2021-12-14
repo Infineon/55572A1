@@ -257,7 +257,6 @@ fi
 CY_APP_HEX="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_download.hex"
 CY_APP_HEX_STATIC="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_static.hex"
 CY_APP_HEX_SS="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_ss.hex"
-CY_APP_HEX_CERT="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_cert.hex"
 CY_APP_HCD="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_download.hcd"
 CY_APP_LD="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_postbuild.ld"
 CY_APP_MAP="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}.map"
@@ -314,13 +313,7 @@ fi
 if [[ $CY_APP_BUILD_EXTRAS = *"DIRECT"* ]]; then
 echo "building image for direct ram load (*.hcd)"
 CY_APP_DIRECT_LOAD="DIRECT_LOAD=1"
-CY_APP_CGS_ARGS+=" -O \"DLConfigTargeting:RAM runtime\""
-CY_APP_CGS_ARGS+=" -O DLConfigVSLocation:0"
-CY_APP_CGS_ARGS+=" -O DLConfigVSLength:0"
-CY_APP_CGS_ARGS+=" -O DLWriteVerifyMode:Write"
-CY_APP_CGS_ARGS+=" -O \"DLSectorEraseMode:Written sectors only\""
 fi
-
 # generate the ld script
 APP_IRAM_LENGTH=$("${CY_TOOL_PERL}" -ne 'print "$1" if /(0x[0-9a-f]+)\s+app_iram_length/' "${CY_APP_MAP}")
 GEN_LD_COMMAND="\
@@ -376,6 +369,10 @@ eval ${CREATE_CGS_COMMAND}
 set -e
 "$CY_TOOL_CAT" "$CY_MAINAPP_BUILD_DIR/$CY_MAINAPP_NAME.report.txt"
 
+# split off the DIRECT_LOAD entries to a separate cgs file to convert to hex and merge with SS & DS
+if [[ $CY_APP_BUILD_EXTRAS = *"DIRECT"* ]]; then
+${CY_TOOL_PERL} -I ${CYWICEDSCRIPTS} ${CYWICEDSCRIPTS}/wiced-split-dl-cgs.pl ${CY_MAINAPP_BUILD_DIR}/${CY_MAINAPP_NAME}.cgs
+fi
 # copy hdf local for cgs tool, it seems to need it despite -D
 "$CY_TOOL_CP" "$CY_APP_HDF" "$CY_MAINAPP_BUILD_DIR/."
 
@@ -395,7 +392,7 @@ fi
 # use set +e because of the darn eval
 echo "Generating app hex file"
 CY_APP_SS_DS_HEX="$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_ss_ds.hex"
-GEN_APP_HEX_COMMAND="${CYWICEDTOOLS}/CGS/cgs -D ${CY_MAINAPP_BUILD_DIR} ${CY_APP_CGS_ARGS} -B ${CY_APP_BTP} -P ${CY_MAINAPP_VERSION} -I ${CY_APP_SS_DS_HEX} -H ${CY_APP_HCD} ${CY_APP_SS_CGS} --cgs-files ${CY_MAINAPP_BUILD_DIR}/${CY_MAINAPP_NAME}.cgs"
+GEN_APP_HEX_COMMAND="${CYWICEDTOOLS}/CGS/cgs -D ${CY_MAINAPP_BUILD_DIR} ${CY_APP_CGS_ARGS} -B ${CY_APP_BTP} -P ${CY_MAINAPP_VERSION} -I ${CY_APP_SS_DS_HEX} ${CY_APP_SS_CGS} --cgs-files ${CY_MAINAPP_BUILD_DIR}/${CY_MAINAPP_NAME}.cgs"
 if [ ${VERBOSE} -ne 0 ]; then
     echo Calling ${GEN_APP_HEX_COMMAND}
 fi
@@ -431,8 +428,6 @@ set -e
 
 echo "Creating SubDS config records"
 CY_DS_SUB_CGS="${CY_MAINAPP_BUILD_DIR}/${CY_MAINAPP_NAME}_ds_sub.cgs"
-CY_DS_SUB_MDH=${CY_DS_SUB_CGS//.cgs/_mdh.bin}
-CY_DS_SUB_MDH_HEX=${CY_DS_SUB_CGS//.cgs/_mdh.hex}
 CY_DS_SUB_TBL=${CY_DS_SUB_CGS//.cgs/.tbl}
 CREATE_SUBDS_COMMAND="\
     ${CY_TOOL_PERL} -I ${CYWICEDSCRIPTS} ${CYWICEDSCRIPTS}/wiced-create-subds.pl\
@@ -442,7 +437,6 @@ CREATE_SUBDS_COMMAND="\
     --subBin=${CY_DS_SUB_CGS//.cgs/.bin}\
     --encBin=${CY_DS_SUB_CGS//.cgs/.enc}\
     --tbl=${CY_DS_SUB_TBL}\
-    --mdhBin=${CY_DS_SUB_MDH}\
     --appbin=${CY_APP_DS_BIN}\
     --ssbin=${CY_APP_SS_BIN}\
     --crt_dir=${CY_MAINAPP_BUILD_DIR}\
@@ -456,7 +450,7 @@ eval "${CREATE_SUBDS_COMMAND}"
 set -e
 
 echo "Generating hex file"
-GEN_HEX_COMMAND="${CYWICEDTOOLS}/CGS/cgs -D ${CY_MAINAPP_BUILD_DIR} -O UseDSTableOutputFormat:R4 ${CY_APP_CGS_ARGS} -B ${CY_APP_BTP} -I ${CY_APP_HEX} -H ${CY_APP_HCD} ${CY_APP_SS_CGS} --cgs-files ${CY_DS_SUB_CGS}"
+GEN_HEX_COMMAND="${CYWICEDTOOLS}/CGS/cgs -D ${CY_MAINAPP_BUILD_DIR} -O UseDSTableOutputFormat:R4 ${CY_APP_CGS_ARGS} -B ${CY_APP_BTP} -I ${CY_APP_HEX} ${CY_APP_SS_CGS} --cgs-files ${CY_DS_SUB_CGS}"
 if [ ${VERBOSE} -ne 0 ]; then
     echo Calling ${GEN_HEX_COMMAND}
 fi
@@ -468,60 +462,41 @@ if [[ ! -e ${CY_APP_HEX} ]]; then
     exit 1
 fi
 
-GEN_MDH_HEX_COMMAND="${CYCROSSPATH}objcopy -I binary -O ihex ${CY_DS_SUB_MDH} ${CY_DS_SUB_MDH_HEX}"
-if [ ${VERBOSE} -ne 0 ]; then
-    echo Calling ${GEN_MDH_HEX_COMMAND}
-fi
-set +e
-eval ${GEN_MDH_HEX_COMMAND}
-set -e
-if [[ ! -e ${CY_DS_SUB_MDH_HEX} ]]; then
-    echo "!! Post build failed to generate ${CY_DS_SUB_MDH_HEX}"
-    exit 1
-fi
-
 if [[ ${CY_APP_MERGE_HEX_NAME} = *"hex"* ]]; then
-    echo "Generating certificate file"
-    CERT_ADDR=$("${CY_TOOL_PERL}" -ne 'printf "0x%08x", int(($1 + $2 + 0x1ff) / 0x100) * 0x100 if /bin\s+(0x[0-9a-f]+)\s+0xffffffff\s+(0x[0-9a-f]+)\s+0x0/' "${CY_DS_SUB_TBL}")
-    GEN_CERT_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/ShiftIntelHex ${CERT_ADDR} ${CY_APP_MERGE_HEX_NAME} ${CY_APP_HEX_CERT}"
-    if [ ${VERBOSE} -ne 0 ]; then
-        echo Calling ${GEN_CERT_COMMAND}
-    fi
-    set +e
-    eval ${GEN_CERT_COMMAND}
-    set -e
-
-    echo "Merging the extra hex ${CY_APP_HEX_CERT}"
-    MERGE_CERT_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/IntelHexMerge ${CY_APP_HEX_CERT} ${CY_APP_HEX} ${CY_APP_HEX}"
+    echo "Merging the extra hex ${CY_APP_MERGE_HEX_NAME}"
+    MERGE_CERT_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/IntelHexMerge ${CY_APP_MERGE_HEX_NAME} ${CY_APP_HEX} ${CY_APP_HEX}"
     if [ ${VERBOSE} -ne 0 ]; then
         echo Calling ${MERGE_CERT_COMMAND}
     fi
     set +e
     eval ${MERGE_CERT_COMMAND}
     set -e
+fi
 
-    SHIFT_APP_HEX=${CY_APP_HEX//.hex/_shift.hex}
-
-    # Shift the app hex for the secure XIP hex
-    SHIFT_APP_HEX_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/ShiftIntelHex 0x00100000 ${CY_APP_HEX} ${SHIFT_APP_HEX}"
+# convert DIRECT_LOAD cgs file to hex and merge with SS & DS
+if [[ $CY_APP_BUILD_EXTRAS = *"DIRECT"* ]]; then
+    CY_DIRECT_LOAD_HEX=${CY_MAINAPP_BUILD_DIR}/${CY_MAINAPP_NAME}_direct_load.hex
+    echo "Merging the DIRECT_LOAD hex ${CY_DIRECT_LOAD_HEX}"
+    MERGE_DIRECT_LOAD_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/IntelHexMerge ${CY_DIRECT_LOAD_HEX} ${CY_APP_HEX} ${CY_APP_HEX}"
     if [ ${VERBOSE} -ne 0 ]; then
-        echo Calling ${SHIFT_APP_HEX_COMMAND}
+        echo Calling ${MERGE_DIRECT_LOAD_COMMAND}
     fi
     set +e
-    eval ${SHIFT_APP_HEX_COMMAND}
-    set -e
-
-    # Merge all hex files
-    MERGE_HEX_COMMAND="${CYWICEDTOOLS}/IntelHexToBin/IntelHexMerge ${CY_DS_SUB_MDH_HEX} ${CY_APP_MERGE_HEX_NAME//cert/sec_xip} ${SHIFT_APP_HEX} ${CY_APP_HEX}"
-    if [ ${VERBOSE} -ne 0 ]; then
-        echo Calling ${MERGE_HEX_COMMAND}
-    fi
-    set +e
-    eval ${MERGE_HEX_COMMAND}
+    eval ${MERGE_DIRECT_LOAD_COMMAND}
     set -e
 fi
 
-#
+# convert final hex to hcd
+echo "Generating the DIRECT_LOAD hcd ${CY_APP_HCD}"
+"$CYWICEDTOOLS/IntelHexToBin/IntelHexToHCD" "$CY_APP_HEX" "$CY_APP_HCD"
+
+if [[ $CY_APP_BUILD_EXTRAS = *"_DM_"* ]]; then
+    SECURE_LOADER=$(dirname "$CY_APP_MINIDRIVER")/secure_loader_dm.hcd
+    echo "Merge DM loader ${SECURE_LOADER}"
+    "$CY_TOOL_MV" "$CY_APP_HCD" "$CY_APP_HCD.premerge"
+    "$CY_TOOL_SYNC"
+    "$CY_TOOL_CAT" ${SECURE_LOADER} "$CY_APP_HCD.premerge" > "$CY_APP_HCD"
+fi
 
 if [[ $CY_APP_BUILD_EXTRAS = *"_APPDS2_"* ]]; then
 if [[ ! -e $CY_DS2_APP_HEX ]]; then
@@ -635,7 +610,9 @@ fi # end if OTA
 if [[ -e $CY_APP_BAUDRATE_FILE ]]; then
 "$CY_TOOL_CP" "$CY_APP_BAUDRATE_FILE" "$CY_MAINAPP_BUILD_DIR/${CY_MAINAPP_NAME}_baudrates.txt"
 fi
+if [[ -e $CY_APP_MINIDRIVER ]]; then
 "$CY_TOOL_CP" "$CY_APP_MINIDRIVER" "$CY_MAINAPP_BUILD_DIR/minidriver.hex"
+fi
 "$CY_TOOL_ECHO" "$CY_APP_CHIPLOAD_FLAGS" >"$CY_MAINAPP_BUILD_DIR/chipload_flags.txt"
 
 echo "Post build processing completed"

@@ -25,7 +25,7 @@
     <ConfigDefine name="WICED_GET_PIN_FOR_IO(idx)" public="true" include="true" value="(*(platform_gpio[(idx)].gpio))" />
 
     <ConfigStruct name="platform_gpio_pins" type="wiced_platform_gpio_t" const="true" isArray="true" public="true" include="true">
-      <Member name="PLATFORM_GPIO_`${pinIndex##}`" value="{ .gpio_pin = BT_GPIO_`${&quot;##&quot;}`, .functionality = `${isBlockUsed(pinLoc##) ? getExposedMember(pinLoc##, &quot;cfgConnection&quot;) : &quot;WICED_GPIO&quot;}`, }" include="`${hasBlock(pinLoc##) &amp;&amp; isBlockUsed(pinLoc##)}`" count="40" />
+      <Member name="PLATFORM_GPIO_`${pinIndex##}`" value="{ .gpio_pin = WICED_GPIO_0`${&quot;##&quot;}`, .functionality = `${isBlockUsed(pinLoc##) ? getExposedMember(pinLoc##, &quot;cfgConnection&quot;) : &quot;WICED_GPIO&quot;}`, }" include="`${hasBlock(pinLoc##) &amp;&amp; isBlockUsed(pinLoc##)}`" count="40" />
     </ConfigStruct>
 
     <ConfigVariable name="platform_gpio_pin_count" type="size_t" const="true" value="(sizeof(platform_gpio_pins) / sizeof(wiced_platform_gpio_t))" public="true" include="true" />

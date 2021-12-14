@@ -51,6 +51,7 @@
 *  Private Typedef and Enum
 *******************************************************************************/
 #define BIT_NUM_OF_BYTE 8
+#define PLATFORM_HEAP_SIZE 1024 * 2
 
 /*******************************************************************************
 *  Private structure
@@ -92,6 +93,8 @@ static struct
     wiced_mutex_t       *p_mutex;
 } platform_mem_info = {0};
 
+wiced_bt_heap_t *p_platform_heap = NULL;
+
 /*******************************************************************************
 *  Declaration of Static Functions
 *******************************************************************************/
@@ -108,6 +111,14 @@ wiced_bool_t platform_mem_init(void)
     uint16_t num_of_buf = 0;
     uint8_t *p_index = NULL;
     platform_mem_buf_ctrl_t *p_buf_ctrl = NULL;
+
+    /* Create a platform heap */
+    p_platform_heap = wiced_bt_create_heap("platform_heap", NULL, PLATFORM_HEAP_SIZE, NULL,
+            WICED_FALSE);
+    if (p_platform_heap == NULL)
+    {
+        return WICED_FALSE;
+    }
 
     /* Guarantee that the size of larger category must be strictly larger */
     for (i = 0 ; i < __num_of(platform_mem_cfg) - 1 ; i++)
@@ -143,8 +154,8 @@ wiced_bool_t platform_mem_init(void)
 
     /* Request a permanent memory from MPAF. */
     num_of_use_map = ((uint32_t) num_of_buf + BIT_NUM_OF_BYTE - 1) / BIT_NUM_OF_BYTE;
-    platform_mem_info.p_use_map = wiced_memory_permanent_allocate(num_of_use_map);
-    platform_mem_info.p_memory_min = wiced_memory_permanent_allocate(total_memory_size);
+    platform_mem_info.p_use_map = wiced_bt_get_buffer_from_heap(p_platform_heap, num_of_use_map);
+    platform_mem_info.p_memory_min = wiced_bt_get_buffer_from_heap(p_platform_heap, total_memory_size);
 
     if ((platform_mem_info.p_use_map == NULL) ||
         (platform_mem_info.p_memory_min == NULL))

@@ -33,11 +33,11 @@
 
 /** @file
  *
- * Bluetooth AVRC Remote Control Application Programming WICED Interface
+ * Bluetooth AVRC Remote Control Application Programming AIROC Interface
  *
  * @defgroup wicedbt      Bluetooth
  *
- * WICED Bluetooth AVRC Remote Control Functions
+ * AIROC Bluetooth AVRC Remote Control Functions
  */
 
 #pragma once

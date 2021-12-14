@@ -249,7 +249,7 @@ typedef union
 /**
  * Audio Insert Callback function type wiced_bt_audio_insert_callback_t
  *
- *                  WICED Audio Insert Event callback (registered with wiced_bt_audio_insert_init)
+ *                  AIROC Audio Insert Event callback (registered with wiced_bt_audio_insert_init)
  *
  * @param[in]       event: Audio Insert event received
  * @param[in]       p_data : Data (pointer on union of structure) associated with the event
@@ -271,7 +271,7 @@ typedef void (wiced_bt_audio_insert_callback_t)(wiced_bt_audio_insert_event_t ev
 /**
  * wiced_bt_audio_insert_init
  *
- * Initialize the WiCED BT Audio Insertion Module.
+ * Initialize the AIROC Bluetooth Audio Insertion Module.
  */
 void wiced_bt_audio_insert_init(void);
 

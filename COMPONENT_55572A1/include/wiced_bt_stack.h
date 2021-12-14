@@ -43,7 +43,7 @@
  *      5. Security - manages all security functionality
  *      6. Power Management - manages park, sniff, hold, etc.
  *
- * WICED Bluetooth Framework Functions
+ * AIROC Bluetooth Framework Functions
  */
 
 #pragma once
@@ -76,7 +76,7 @@ extern "C" {
  *
  * @return   <b> WICED_BT_SUCCESS </b> : on success; \n
  *           <b> WICED_BT_FAILED  </b> : if an error occurred
- * @note This API must be called before using any BT functionality. \n
+ * @note This API must be called before using any Bluetooth functionality. \n
  * If p_bt_cfg_settings is null, stack uses default parameters defined in wiced_bt_cfg.h \n
  *     However, it is strongly recommended that applications define the configuration to appropriate values based on the application use case.
  */

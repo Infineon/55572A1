@@ -80,7 +80,10 @@
 *** return status. They are not modifiable.
 ******************************************************************************/
 
-/// Type Definitions
+/// Type Definitions for consistency.
+#define SPI_MSB_FIRST WICED_SPI_MSB_FIRST
+#define SPI_SS_ACTIVE_LOW WICED_SPI_SS_ACTIVE_LOW
+#define SPI_MODE_0 WICED_SPI_MODE_0
 
 /** SPI Interfaces */
 typedef enum
@@ -341,5 +344,14 @@ uint32_t wiced_hal_pspi_slave_get_tx_fifo_count(spi_interface_t spi);
 ///////////////////////////////////////////////////////////////////////////////
 uint32_t wiced_hal_pspi_slave_get_rx_fifo_count(spi_interface_t spi);
 
+
+///////////////////////////////////////////////////////////////////////////////
+/// clear the rx fifo.
+///
+/// \param spi  - SPI interface.( SPI1 or SPI2 ).
+///
+/// \return none
+///////////////////////////////////////////////////////////////////////////////
+void wiced_hal_pspi_clear_rx_fifo(spi_interface_t spi);
 
 /* @} */

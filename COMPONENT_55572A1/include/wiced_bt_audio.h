@@ -33,7 +33,7 @@
 
 /** @file
  *
- * @addtogroup  wicedbt_audio_utils     WICED Audio Utilities
+ * @addtogroup  wicedbt_audio_utils     AIROC Audio Utilities
  * @ingroup     wicedbt_av
  *
  * @{
@@ -86,7 +86,7 @@ typedef uint8_t wiced_audio_sco_data_route_t;
 typedef struct
 {
     wiced_device_role_t     role;                           /**< Role if audio source, sink or hf device */
-    // Size of memory needed by the audio source device to store the Audio data received from a host MCU over UART/SPI transport before encoding and transmitting over BT radio.
+    // Size of memory needed by the audio source device to store the Audio data received from a host MCU over UART/SPI transport before encoding and transmitting over Bluetooth radio.
     //Or Size of the memory needed by the audio sink device to send the received audio data to the host MCU over transport
     uint32_t                audio_tx_buffer_size;           /**< Audio Tx buffer size */
     // Size of memory to allocate for use by codec and audio jitter buffer. Application specifies the size based on the codecs supported for various use cases. See wiced_audio_buffer_intialize()

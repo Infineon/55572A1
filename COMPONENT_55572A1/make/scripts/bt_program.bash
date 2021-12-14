@@ -90,6 +90,10 @@ do
 			DIRECT_LOAD="${i#*=}"
 			shift
 			;;
+		-l=*|--lcs=*)
+			CY_LCS="${i#*=}"
+			shift
+			;;
 		-v|--verbose)
 			VERBOSE=1
 			shift
@@ -116,10 +120,11 @@ if [ "$VERBOSE" != "" ]; then
 	echo "1: CYMODUSSHELL : $CYMODUSSHELL"
 	echo "2: CYWICEDTOOLS : $CYWICEDTOOLS"
 	echo "3: CYWICEDSCRIPTS : $CYWICEDSCRIPTS"
-	echo "4: CY_APP_HEX  : $CY_APP_HEX"
-	echo "5: CY_APP_ELF  : $CY_APP_ELF"
+	echo "4: CY_APP_HEX   : $CY_APP_HEX"
+	echo "5: CY_APP_ELF   : $CY_APP_ELF"
 	echo "6: CY_APP_UART  : $CY_APP_UART"
 	echo "7: DIRECT_LOAD  : $DIRECT_LOAD"
+	echo "8: LCS          : $CY_LCS"
 fi
 
 # intercept this "program" target
@@ -145,10 +150,13 @@ fi
 
 dir=${CY_APP_HEX%/*}
 if [ "$DIRECT_LOAD" = "1" ]; then
-	echo "downloading image for direct ram load (*.hcd)"
-	CY_APP_HEX=${CY_APP_HEX//.hex/.hcd}
+    echo "Prepare image for direct ram load (*.hcd)"
+    CY_APP_HEX=${CY_APP_HEX//.hex/.hcd}
 else
     DIRECT_LOAD="0"
+fi
+if [ "$CY_LCS" = "DM" ]; then
+    CY_APP_HEX=${CY_APP_HEX//.hex/.hcd}
 fi
 
 # Extract the app name from the elf
@@ -171,12 +179,32 @@ if ! type "$CY_TOOL_PERL" > /dev/null 2>&1; then
 CY_TOOL_PERL=$CYMODUSSHELL/bin/perl
 fi
 
-if [ "$VERBOSE" != "" ]; then
-echo "$CY_TOOL_PERL" "$CYWICEDSCRIPTS/ChipLoad.pl" -tools_path $CYWICEDTOOLS -build_path $dir -id $CYWICEDID -btp $CYWICEDBTP \
+if [ "$CY_LCS" != "DM" ]; then
+  if [ "$VERBOSE" != "" ]; then
+    echo "$CY_TOOL_PERL" "$CYWICEDSCRIPTS/ChipLoad.pl" -tools_path $CYWICEDTOOLS -build_path $dir -id $CYWICEDID -btp $CYWICEDBTP \
+      -mini $CYWICEDMINI -hex $CY_APP_HEX -flags $CYWICEDFLAGS -uart $CY_APP_UART $CYWICEDBAUDFILECMD -direct $DIRECT_LOAD
+  fi
+  "$CY_TOOL_PERL" "$CYWICEDSCRIPTS/ChipLoad.pl" -tools_path $CYWICEDTOOLS -build_path $dir -id $CYWICEDID -btp $CYWICEDBTP \
             -mini $CYWICEDMINI -hex $CY_APP_HEX -flags $CYWICEDFLAGS -uart $CY_APP_UART $CYWICEDBAUDFILECMD -direct $DIRECT_LOAD
+else
+  echo "Paused for user action..."
+  echo "Press and hold the 'Recover' button on the kit."
+  echo "Press and hold the 'Reset' button on the kit."
+  echo "Release the 'Reset' button."
+  echo "After one second, release the 'Recover' button."
+  echo "Hit any keyboard key within 2 seconds of releasing the 'Recover' button to start programming."
+  read -n 1 -s
+  echo "Programming..."
+  DOWNLOAD_LOG=$(dirname "$CY_APP_HEX")/download.log
+  if [ "$VERBOSE" != "" ]; then
+    echo "$CYWICEDTOOLS/MbtP/MbpP download $CY_APP_UART $CY_APP_HEX"
+  fi
+  "$CYWICEDTOOLS/MbtP/MbtP" download $CY_APP_UART "$CY_APP_HEX" > "$DOWNLOAD_LOG"
+  DOWNLOAD_LOG_LAST_LINE=$(cat "$DOWNLOAD_LOG" | tail -1)
+  echo "$DOWNLOAD_LOG_LAST_LINE"
+  [[ "$DOWNLOAD_LOG_LAST_LINE" = *"Fail"* ]] && false
+  [[ "$DOWNLOAD_LOG_LAST_LINE" = *"success"* ]] && true
 fi
-"$CY_TOOL_PERL" "$CYWICEDSCRIPTS/ChipLoad.pl" -tools_path $CYWICEDTOOLS -build_path $dir -id $CYWICEDID -btp $CYWICEDBTP \
-            -mini $CYWICEDMINI -hex $CY_APP_HEX -flags $CYWICEDFLAGS -uart $CY_APP_UART $CYWICEDBAUDFILECMD -direct $DIRECT_LOAD
 
 if [ $? -eq 0 ]; then
    echo "Download succeeded"
@@ -187,9 +215,22 @@ else
    echo
    echo "If you have issues downloading to the kit, follow the steps below:"
    echo
+if [ "$CY_LCS" != "DM" ]; then
    echo "Press and hold the 'Recover' button on the kit."
    echo "Press and hold the 'Reset' button on the kit."
    echo "Release the 'Reset' button."
    echo "After one second, release the 'Recover' button."
+else
+   echo "Restart the 'make ... program'."
+   echo "When the 'Pause for recovery reset' message is displayed, make sure the keyboard cursor is active in the build console."
+   echo "Press and hold the 'Recover' button on the kit."
+   echo "Press and hold the 'Reset' button on the kit."
+   echo "Release the 'Reset' button then quickly release the 'Recover' button."
+   echo "Immediately press a key on the keyboard to resume the build console processing."
+   echo ""
+   echo "Replace 'UART?=AUTO' with 'UART=xxx' in the application makefile, where xxx is the HCI port name"
+   echo "This would be COMXX for Windows or /dev/ttyXX for Linux or macOS."
+   echo "Alternatively, use UART=xxx on the 'make' command line."
+fi
    exit 1
 fi

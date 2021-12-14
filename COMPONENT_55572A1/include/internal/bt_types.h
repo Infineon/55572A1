@@ -152,6 +152,17 @@ typedef UINT8         wiced_bt_device_address_t[BD_ADDR_LEN];
 typedef UINT8 BD_ADDR[BD_ADDR_LEN];
 #endif
 
+/* Define the header of each buffer used in the Bluetooth stack. */
+typedef struct
+{
+    UINT16          event;
+    UINT16          len;
+    UINT16          offset;
+    UINT16          layer_specific;
+} BT_HDR;
+
+#define BT_HDR_SIZE (sizeof (BT_HDR))
+
 //! Macro to obtain the minimum (smaller) of two numbers.
 #define BT_MIN( a, b )                                             ( ( (a) < (b) ) ? (a) : (b) )
 

@@ -41,19 +41,25 @@
 #include "wiced_bt_sdp.h"
 #include "wiced_bt_avrc_defs.h"
 #include "wiced_bt_avrc.h"
-
-
+#include "wiced_bt_l2c.h"
+/**
+ * @addtogroup  wicedbt_av          Audio / Video
+ * @ingroup     wicedbt
+ *
+ * This section describes the API to use various audio/video profiles, such as A2DP, AVDTP, AVRCP, HFP.
+ *
+ * @{
+*/
 
 /**
  * @cond DUAL_MODE
- * @defgroup  wicedbt_avrc        Audio/Video Remote Control (AVRC)
  *
  * This section describes the API's to use Audio/Video Remote Control Profile commands
  * which use underlying AVCT protocol.
  *
  * @addtogroup  wicedbt_avrc    Audio/Video Remote Control (AVRC)
  *
- * @ingroup     wicedbt
+ * @ingroup     wicedbt_av
  *
  * @{
 */
@@ -617,9 +623,25 @@ int avrc_read_browse_item_from_stream(uint8_t *p_item_stream, uint16_t stream_le
 
 int avrc_read_name_from_stream(uint8_t *p_name_stream, uint16_t stream_len, wiced_bt_avrc_name_t *p_name);
 
-/**@} wicedbt */
-/* @endcond*/
+/**
+ *
+ * This function set the data receive buffer in stack.
+ *
+ * @param[in]       handle              : AVRC  connection handle
+ * @param[in]       p_drb               : pointer to the buffer
+ * @param[out]      payload_len         :  valid length of buffer pointed by \p p_drb
+ * @param[out]      p_unreg_cb          :  Callback function to release the  DRB pointed by \p p_drb
+ *
+ * Returns          Returns TRUE if success otherwise, FALSE
+ *
+
+ */
+
+wiced_bool_t wiced_bt_avrc_set_browse_drb(uint8_t handle, tDRB *p_drb, uint16_t payload_len, wiced_bt_l2cap_drb_release_cb *p_unreg_cb);
 
 #ifdef __cplusplus
 }
 #endif
+/**@} wicedbt_avrc */
+/* @endcond*/
+/**@} wicedbt_av */

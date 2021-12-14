@@ -33,7 +33,7 @@
 
 /** @file
  *
- * WICED Application pre init configuration Interface
+ * AIROC Application pre init configuration Interface
  *
  * This is the configuration for below HCI firmware and applicable only when
  * application and firmware shares the processor resources.
@@ -42,7 +42,7 @@
  *    1. ACL buffer configuration - Size and number of ACL buffers for controller ACL process.
  *    2. Dynamic memory configuration - Number of pools and each pool size and buffer count of the pool
  *    3. Application entry - Application function entry to be called once firmware initialized
- *    4. Number of BLE connections - Max number of BLE connections
+ *    4. Number of LE connections - Max number of LE connections
  *
  */
 
@@ -180,12 +180,12 @@ typedef STRUCT_PACKED
     wiced_bt_config_acl_pool_t          acl_config;             /* ACL configuration */
 
 #if ULP_ENABLE
-    wiced_bt_config_acl_pool_t          ble_acl_config;         /* BLE ACL configuration */
+    wiced_bt_config_acl_pool_t          ble_acl_config;         /* LE ACL configuration */
 #endif
 
     wiced_dynamic_memory_pools_cfg_t    dynamic_mem_config;     /* dynamic memory configuration */
 
-    wiced_app_entry_fn_t                wiced_app_entry_fn;     /* WICED application function entry */
+    wiced_app_entry_fn_t                wiced_app_entry_fn;     /* AIROC application function entry */
     uint32_t                            app_thread_stack_size;  /* application thread stack size */
 
     /* wiced app scatter load information*/
@@ -195,10 +195,10 @@ typedef STRUCT_PACKED
     uint32_t                            app_iram_data_length;
     void                                *app_irom_data_begin;
 
-    uint8_t                             ble_con_max;            /* Max number BLE connection */
+    uint8_t                             ble_con_max;            /* Max number LE connection */
 
 #if defined(ULP_ENABLE) && defined(LE_ISOCH_CONN)
-    /* BLE ISO config */
+    /* LE ISO config */
     wiced_bt_config_iso_pools_t         iso_buf_cfg;
 #endif
 

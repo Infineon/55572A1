@@ -33,17 +33,17 @@
 
 /** @file
  *
- * WICED Bluetooth Low Energy (BLE) Functions
+ * AIROC Bluetooth Low Energy (LE) Functions
  *
  */
 #pragma once
 
 /**
  * @if DUAL_MODE
- * @addtogroup  btm_ble_api_functions        BLE (Bluetooth Low Energy)
+ * @addtogroup  btm_ble_api_functions        Bluetooth Low Energy
  * @ingroup  wicedbt_DeviceManagement
- * This section describes the API's to use BLE functionality such as advertisement, scanning
- * BLE Connection, Data transfer, BLE Security etc.
+ * This section describes the API's to use LE functionality such as advertisement, scanning
+ * LE Connection, Data transfer, LE Security etc.
  * @else
  * @addtogroup  wicedbt_DeviceManagement
  * @endif
@@ -59,7 +59,7 @@
 
 #define BTM_AFH_CHNL_MAP_SIZE    HCI_AFH_CHANNEL_MAP_LEN    /**< AFH channel map size */
 #define BLE_CHANNEL_MAP_LEN      5                          /**< AFH Channel Map len */
-/** BLE Channel Map */
+/** LE Channel Map */
 typedef uint8_t wiced_bt_ble_chnl_map_t[BLE_CHANNEL_MAP_LEN];
 
 
@@ -71,7 +71,7 @@ enum wiced_bt_ble_scanner_filter_policy_e {
     BTM_BLE_SCAN_POLICY_FILTER_RPA_DIR_ADV_RSP,/**< accept adv packet from device in filter Accept List, directed adv pkt not directed to me is ignored except direct adv with RPA */
     BTM_BLE_SCAN_POLICY_MAX                       /**< Max Scan filter policy value */
 };
-/** BLE Scanner filter policy */
+/** LE Scanner filter policy */
 typedef uint8_t   wiced_bt_ble_scanner_filter_policy_t;  /**< Scanner filter policy (see #wiced_bt_ble_scanner_filter_policy_e) */
 
 
@@ -161,8 +161,8 @@ typedef uint8_t   wiced_bt_ble_advert_filter_policy_t;  /**< Advertising filter 
 /** default supervision timeout */
 #define BTM_BLE_CONN_TIMEOUT_DEF                    2000
 
-/** BLE Signature
- *  BLE data signature length 8 Bytes + 4 bytes counter
+/** LE Signature
+ *  LE data signature length 8 Bytes + 4 bytes counter
  */
 #define BTM_BLE_AUTH_SIGNATURE_SIZE                 12
 typedef uint8_t wiced_dev_ble_signature_t[BTM_BLE_AUTH_SIGNATURE_SIZE];     /**< Device address (see #BTM_BLE_AUTH_SIGNATURE_SIZE) */
@@ -180,8 +180,8 @@ typedef uint8_t wiced_dev_ble_signature_t[BTM_BLE_AUTH_SIGNATURE_SIZE];     /**<
 #define BTM_BLE_SIMULTANEOUS_DUAL_MODE_TO_SAME_DEVICE_CONTROLLER_SUPPORTED      (0x01 << 3)   /**< Simultaneous LE and BR/EDR to Same Device Capable (Controller). */
 #define BTM_BLE_SIMULTANEOUS_DUAL_MODE_TO_SAME_DEVICE_HOST_SUPPORTED            (0x01 << 4)   /**< Simultaneous LE and BR/EDR to Same Device Capable (Host). */
 #define BTM_BLE_NON_LIMITED_DISCOVERABLE_FLAG       (0x00 )         /**< Non Discoverable */
-#define BTM_BLE_ADVERT_FLAG_MASK                    (BTM_BLE_LIMITED_DISCOVERABLE_FLAG | BTM_BLE_BREDR_NOT_SUPPORTED | BTM_BLE_GENERAL_DISCOVERABLE_FLAG) /**< BLE adverisement mask */
-#define BTM_BLE_LIMITED_DISCOVERABLE_MASK           (BTM_BLE_LIMITED_DISCOVERABLE_FLAG )    /**< BLE Limited discovery mask*/
+#define BTM_BLE_ADVERT_FLAG_MASK                    (BTM_BLE_LIMITED_DISCOVERABLE_FLAG | BTM_BLE_BREDR_NOT_SUPPORTED | BTM_BLE_GENERAL_DISCOVERABLE_FLAG) /**< LE adverisement mask */
+#define BTM_BLE_LIMITED_DISCOVERABLE_MASK           (BTM_BLE_LIMITED_DISCOVERABLE_FLAG )    /**< LE Limited discovery mask*/
 
 
 /** Advertisement data types */
@@ -230,7 +230,7 @@ enum wiced_bt_ble_advert_type_e {
     BTM_BLE_ADVERT_TYPE_3D_INFO_DATA                = 0x3D,                 /**< 3D Information Data */
     BTM_BLE_ADVERT_TYPE_MANUFACTURER                = 0xFF                  /**< Manufacturer data */
 };
-typedef uint8_t   wiced_bt_ble_advert_type_t;    /**< BLE advertisement data type (see #wiced_bt_ble_advert_type_e) */
+typedef uint8_t   wiced_bt_ble_advert_type_t;    /**< LE advertisement data type (see #wiced_bt_ble_advert_type_e) */
 
 /** security settings used with L2CAP LE COC */
 enum wiced_bt_ble_sec_flags_e
@@ -293,7 +293,7 @@ enum wiced_bt_ble_sec_action_type_e
     BTM_BLE_SEC_ENCRYPT_NO_MITM,    /**< encryption without MITM */
     BTM_BLE_SEC_ENCRYPT_MITM        /**< encryption with MITM*/
 };
-typedef uint8_t wiced_bt_ble_sec_action_type_t;  /**< BLE security type. refer #wiced_bt_ble_sec_action_type_e */
+typedef uint8_t wiced_bt_ble_sec_action_type_t;  /**< LE security type. refer #wiced_bt_ble_sec_action_type_e */
 
 #define BTM_BLE_PREFER_1M_PHY              0x01    /**< LE 1M PHY preference */
 #define BTM_BLE_PREFER_2M_PHY              0x02    /**< LE 2M PHY preference */
@@ -329,7 +329,7 @@ typedef struct
     wiced_bt_ble_lelr_phy_preferences_t     phy_opts;           /**< Host preference on LE coded PHY */
 }wiced_bt_ble_phy_preferences_t;
 
-/** BLE connection parameteres */
+/** LE connection parameteres */
 typedef struct
 {
     uint8_t     role;                   /**< Connection role 0: Central  1: Peripheral */
@@ -338,7 +338,7 @@ typedef struct
     uint16_t    supervision_timeout;    /**< Supervision timeout */
 }wiced_bt_ble_conn_params_t;
 
-/** BLE preferred connection parameters */
+/** LE preferred connection parameters */
 typedef struct
 {
     uint16_t  conn_interval_min;  /**< minimum connection interval */
@@ -377,7 +377,7 @@ enum wiced_bt_ble_multi_advert_type_e
     MULTI_ADVERT_NONCONNECTABLE_EVENT               = 0x03,     /**< Multi adv NonConnectable event */
     MULTI_ADVERT_LOW_DUTY_CYCLE_DIRECT_EVENT        = 0x04      /**< Multi adv Low Cycle directed event */
 };
-typedef uint8_t wiced_bt_ble_multi_advert_type_t;    /**< BLE advertisement type (see #wiced_bt_ble_multi_advert_type_e) */
+typedef uint8_t wiced_bt_ble_multi_advert_type_t;    /**< LE advertisement type (see #wiced_bt_ble_multi_advert_type_e) */
 
 
 /** LE Multi advertising parameter */
@@ -405,7 +405,7 @@ enum wiced_bt_ble_privacy_e
     BTM_BLE_PRIVACY_MODE_NETWORK,                           /**< network privacy mode*/
     BTM_BLE_PRIVACY_MODE_DEVICE                             /**< device privacy mode*/
 };
-/** BLE Privacy mode. Refer #wiced_bt_ble_privacy_e */
+/** LE Privacy mode. Refer #wiced_bt_ble_privacy_e */
 typedef uint8_t wiced_bt_ble_privacy_mode_t;
 
 /** Multi-advertisement Filtering policy  */
@@ -416,7 +416,7 @@ enum wiced_bt_ble_multi_advert_filtering_policy_e
     MULTI_ADVERT_FILTER_POLICY_ADV_ALLOW_UNKNOWN_SCANNING       = 0x02,   /**< Multi adv filter filter Accept List for connection request */
     MULTI_ADVERT_FILTER_POLICY_USE_FOR_ALL                      = 0x03    /**< Multi adv filter filter Accept List for all */
 };
-typedef uint8_t wiced_bt_ble_multi_advert_filtering_policy_t;    /**< BLE advertisement filtering policy (see #wiced_bt_ble_multi_advert_filtering_policy_e) */
+typedef uint8_t wiced_bt_ble_multi_advert_filtering_policy_t;    /**< LE advertisement filtering policy (see #wiced_bt_ble_multi_advert_filtering_policy_e) */
 
 /**
  * Callback wiced_bt_ble_selective_conn_cback_t
@@ -457,7 +457,7 @@ typedef void (wiced_bt_ble_read_phy_complete_callback_t) (wiced_bt_ble_phy_updat
 /** ADV extension structures */
 #define WICED_BT_BLE_MAX_EXT_ADV_DATA_LEN    251
 
-/** BLE PHY */
+/** LE PHY */
 enum
 {
     WICED_BT_BLE_EXT_ADV_PHY_1M          = 0x1, /**< advetiser advertisement PHY is LE 1M */
@@ -465,16 +465,16 @@ enum
     WICED_BT_BLE_EXT_ADV_PHY_LE_CODED    = 0x3, /**< advetiser advertisement PHY is LE Coded (for long range) */
     WICED_BT_BLE_EXT_ADV_NUM_PHYS        = 0x3  /**< 3 PHYs are defined */
 };
-typedef uint8_t wiced_bt_ble_ext_adv_phy_t;     /**< BLE phy to be used for extended advertisement */
+typedef uint8_t wiced_bt_ble_ext_adv_phy_t;     /**< LE phy to be used for extended advertisement */
 
-/** BLE PHY bit mask */
+/** LE PHY bit mask */
 enum
 {
     WICED_BT_BLE_EXT_ADV_PHY_1M_BIT         = (1 << 0), /**< Bit mask to specify for LE1M PHY */
     WICED_BT_BLE_EXT_ADV_PHY_2M_BIT         = (1 << 1), /**< Bit mask to specify for LE2M PHY */
     WICED_BT_BLE_EXT_ADV_PHY_LE_CODED_BIT   = (1 << 2), /**< Bit mask to specify for LE coded PHY */
 };
-typedef uint8_t wiced_bt_ble_ext_adv_phy_mask_t;  /**< BLE phy mask to be used for extended advertisement */
+typedef uint8_t wiced_bt_ble_ext_adv_phy_mask_t;  /**< LE phy mask to be used for extended advertisement */
 
 /** Advertising event properties: Describes the type of advertising event that is being configured and its basic properties */
 enum
@@ -489,7 +489,7 @@ enum
 
     /** Other bits RFU */
 };
-typedef uint16_t wiced_bt_ble_ext_adv_event_property_t;  /**< BLE extended advertisement event property */
+typedef uint16_t wiced_bt_ble_ext_adv_event_property_t;  /**< LE extended advertisement event property */
 
 /** Advertisement set handle to identify adv set b/n host and controller */
 enum
@@ -726,7 +726,7 @@ typedef struct
     wiced_bt_device_address_t       scanner_address;    /**< Scanner address */
 } wiced_bt_ble_scan_req_received_event_data_t;
 
-/** BLE channel selection algorithms */
+/** LE channel selection algorithms */
 enum wiced_bt_ble_channel_sel_algo_e
 {
     LE_CHANNEL_SEL_ALGO_1_USED,         /**< LE channel selection algorithm#1 used */
@@ -738,7 +738,7 @@ typedef uint8_t wiced_bt_ble_channel_sel_algo_t;/**< LE channel algorithm select
 typedef struct
 {
     wiced_bt_ble_connection_handle_t      connection_handle;    /**< HCI connection handle */
-    wiced_bt_ble_channel_sel_algo_t       channel_sel_algo;     /**< BLE channel selection algorithm used for this connection */
+    wiced_bt_ble_channel_sel_algo_t       channel_sel_algo;     /**< LE channel selection algorithm used for this connection */
 
     /* remaining RFU */
 } wiced_bt_ble_channel_sel_algo_event_data_t;
@@ -812,7 +812,7 @@ extern "C" {
  * @addtogroup  btm_ble_adv_scan_functions        Advertisement & Scan
  * @ingroup     btm_ble_api_functions
  *
- * This section provides functions for BLE advertisement and BLE scan operations.
+ * This section provides functions for LE advertisement and LE scan operations.
  *
  * @{
  */
@@ -1005,14 +1005,14 @@ void wiced_bt_ble_update_scanner_filter_policy(wiced_bt_ble_scanner_filter_polic
  * @addtogroup  btm_ble_conn_filter_accept_list_functions        Connection and Filter Accept List
  * @ingroup     btm_ble_api_functions
  *
- * This section provides functions for BLE connection related and Filter Accept List operations.
+ * This section provides functions for LE connection related and Filter Accept List operations.
  *
  * @{
  */
 
 /**
  *
- * Set BLE background connection procedure type.
+ * Set LE background connection procedure type.
  *
  * @param[in]       conn_type: BTM_BLE_CONN_NONE, BTM_BLE_CONN_AUTO, or BTM_BLE_CONN_SELECTIVE
  * @param[in]       p_select_cback: callback for BTM_BLE_CONN_SELECTIVE
@@ -1379,7 +1379,7 @@ wiced_bt_dev_status_t wiced_bt_ble_set_privacy_mode(wiced_bt_device_address_t re
 wiced_bt_dev_status_t wiced_bt_ble_read_device_random_address (wiced_bt_device_address_t random_bd_addr);
 
 /**
- * Check if the local BT controller supports extended advertising
+ * Check if the local Bluetooth controller supports extended advertising
  *
  * @return          wiced_bool_t
  *
@@ -1387,7 +1387,7 @@ wiced_bt_dev_status_t wiced_bt_ble_read_device_random_address (wiced_bt_device_a
 wiced_bool_t wiced_bt_ble_is_ext_adv_supported(void);
 
 /**
- * Check if the local BT controller supports periodic advertising
+ * Check if the local Bluetooth controller supports periodic advertising
  *
  * @return          wiced_bool_t
  *
@@ -1418,7 +1418,7 @@ wiced_bt_dev_status_t wiced_bt_ble_set_ext_adv_random_address(wiced_bt_ble_ext_a
  * @param[in]        event_properties            Bit mask to speicify connectable,scannable,low duty,high duty,directed,legacy adv
  * @param[in]        primary_adv_int_min         Range: 0x000020 to 0xFFFFFF (20 ms to 10,485.759375 s)
  * @param[in]        primary_adv_int_max         Range: 0x000020 to 0xFFFFFF(20 ms to 10,485.759375 s)
- * @param[in]        primary_adv_channel_map     BLE advertisement channel map (see #wiced_bt_ble_advert_chnl_map_e)
+ * @param[in]        primary_adv_channel_map     LE advertisement channel map (see #wiced_bt_ble_advert_chnl_map_e)
  * @param[in]        own_addr_type               Ignored in case of anonymous adv. See event_properties
  * @param[in]        peer_addr_type              Peer address type
  * @param[in]        peer_addr                   peer address
@@ -1777,7 +1777,7 @@ void wiced_bt_ble_register_adv_ext_cback (wiced_bt_ble_adv_ext_event_cb_fp_t p_a
 wiced_bt_dev_status_t wiced_bt_ble_set_periodic_adv_rcv_enable(wiced_bt_ble_periodic_adv_sync_handle_t sync_handle, wiced_bool_t enable);
 
 /**
- * Acquire current BLE Resolvable Private Address
+ * Acquire current LE Resolvable Private Address
  *
  * @param[in]       None
  *
@@ -1788,8 +1788,8 @@ uint8_t *wiced_btm_get_private_bda(void);
 /**
  * Private Device Address Resolution
  *
- * @param[in]       rpa : BLE Resolvable Private Address
- * @param[in]       irk : BLE IRK
+ * @param[in]       rpa : LE Resolvable Private Address
+ * @param[in]       irk : LE IRK
  * @return          wiced_result_t
  * <b> WICED_BT_SUCCESS </b> : the identity of device address has been resolved.
  * <b> WICED_BT_ERROR </b> : otherwise.

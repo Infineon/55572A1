@@ -42,7 +42,7 @@
 /**
  * @cond DUAL_MODE
  * @addtogroup  sco      Synchronous Connection Oriented (SCO) Channel
- * @ingroup     wicedbt_sco
+ * @ingroup     wicedbt
  *
  * @{
  */
@@ -86,7 +86,7 @@ typedef void (wiced_bt_sco_data_cb_t) (uint16_t sco_channel, uint16_t length, ui
 
 
 /** Subset for the enhanced setup/accept synchronous connection paramters
- * See BT 4.1 or later HCI spec for details */
+ * See Bluetooth 4.1 or later HCI spec for details */
 typedef struct
 {
     uint16_t max_latency;                   /**< Maximum latency (0x4-0xFFFE in msecs) */
@@ -152,7 +152,7 @@ wiced_bt_dev_status_t wiced_bt_sco_create_as_initiator (wiced_bt_device_address_
 wiced_bt_dev_status_t wiced_bt_sco_create_as_acceptor_ex (wiced_bt_device_address_t remote_bda, uint16_t *p_sco_index);
 
 /* defined this macro for backward compatiblity */
-#define wiced_bt_sco_create_as_acceptor(p_sco_idx)  wiced_bt_sco_create_as_acceptor_ex(NULL,  p_sco_index)
+#define wiced_bt_sco_create_as_acceptor(p_sco_index)  wiced_bt_sco_create_as_acceptor_ex(NULL,  p_sco_index)
 
 /**
  * Creates a synchronous connection oriented connection as acceptor with specific

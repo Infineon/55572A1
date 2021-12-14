@@ -26,14 +26,14 @@
     <!-- Basic GPIO config settings -->
     <ParamRange id="Index" name="Index" group="General" default="0" min="`${Type eq PERIPHERAL ? 0 : 1}`" max="`${COUNT}`" resolution="1" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Index into the Pin's &quot;platform_`${toLower(Type)}`[]&quot; array (cycfg_pins.c). Note: Choosing a value above the maximum number defined in platform_target.h will require user to update a new value in wiced_platform_`${toLower(Type)}`_number_t enum." />
 
-    <ParamChoice id="DefaultState" name="Default State" group="General" default="WICED_GPIO_PIN_OUTPUT_LOW" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Pin state on power up.">
-      <Entry name="Low" value="WICED_GPIO_PIN_OUTPUT_LOW" visible="true" />
-      <Entry name="High" value="WICED_GPIO_PIN_OUTPUT_HIGH" visible="true" />
+    <ParamChoice id="DefaultState" name="Default State" group="General" default="GPIO_PIN_OUTPUT_LOW" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Pin state on power up.">
+      <Entry name="Low" value="GPIO_PIN_OUTPUT_LOW" visible="true" />
+      <Entry name="High" value="GPIO_PIN_OUTPUT_HIGH" visible="true" />
     </ParamChoice>
 
-    <ParamChoice id="PressedValue" name="Button Pressed Value" group="General" default="WICED_GPIO_PIN_OUTPUT_LOW" visible="`${Type eq BUTTON}`" editable="`${Type eq BUTTON}`" desc="State when button is pressed.">
-      <Entry name="Low" value="WICED_GPIO_PIN_OUTPUT_LOW" visible="true" />
-      <Entry name="High" value="WICED_GPIO_PIN_OUTPUT_HIGH" visible="true" />
+    <ParamChoice id="PressedValue" name="Button Pressed Value" group="General" default="GPIO_PIN_OUTPUT_LOW" visible="`${Type eq BUTTON}`" editable="`${Type eq BUTTON}`" desc="State when button is pressed.">
+      <Entry name="Low" value="GPIO_PIN_OUTPUT_LOW" visible="true" />
+      <Entry name="High" value="GPIO_PIN_OUTPUT_HIGH" visible="true" />
     </ParamChoice>
 
     <ParamBool id="OutputEnable" name="Enable Output" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Enables the output of the pin." />
@@ -49,12 +49,12 @@
     <!-- Advanced GPIO config settings -->
     <ParamBool id="InterruptEnable" name="Enable Interrupt" group="General" default="false" visible="`${Type ne PERIPHERAL}`" editable="true" desc="Enables the interrupt signal from the pin." />
 
-    <ParamChoice id="InterruptTrigger" name="Interrupt Trigger" group="General" default="WICED_GPIO_EN_INT_RISING_EDGE" visible="`${Type ne PERIPHERAL &amp;&amp; InterruptEnable}`" editable="true" desc="Controls what signal change triggers the interrupt." >
-      <Entry name="Level High" value="WICED_GPIO_EN_INT_LEVEL_HIGH" visible="true" />
-      <Entry name="Level Low" value="WICED_GPIO_EN_INT_LEVEL_LOW" visible="true" />
-      <Entry name="Rising Edge" value="WICED_GPIO_EN_INT_RISING_EDGE" visible="true" />
-      <Entry name="Falling Edge" value="WICED_GPIO_EN_INT_FALLING_EDGE" visible="true" />
-      <Entry name="Both Edges" value="WICED_GPIO_EN_INT_BOTH_EDGE" visible="true" />
+    <ParamChoice id="InterruptTrigger" name="Interrupt Trigger" group="General" default="GPIO_EN_INT_RISING_EDGE" visible="`${Type ne PERIPHERAL &amp;&amp; InterruptEnable}`" editable="true" desc="Controls what signal change triggers the interrupt." >
+      <Entry name="Level High" value="GPIO_EN_INT_LEVEL_HIGH" visible="true" />
+      <Entry name="Level Low" value="GPIO_EN_INT_LEVEL_LOW" visible="true" />
+      <Entry name="Rising Edge" value="GPIO_EN_INT_RISING_EDGE" visible="true" />
+      <Entry name="Falling Edge" value="GPIO_EN_INT_FALLING_EDGE" visible="true" />
+      <Entry name="Both Edges" value="GPIO_EN_INT_BOTH_EDGE" visible="true" />
     </ParamChoice>
 
     <!-- Utility -->
@@ -81,11 +81,11 @@
     <ConfigDefine name="`${cfgStruct}`" public="false" include="`${Type ne PERIPHERAL}`" value="\&#xA;{\&#xA;
    .gpio = (wiced_bt_gpio_numbers_t*)&amp;platform_gpio_pins[PLATFORM_GPIO_`${idxNum}`].gpio_pin, \&#xA;
    .config = `${
-      (InputDisable ? &quot;WICED_GPIO_INPUT_DISABLE&quot; : &quot;WICED_GPIO_INPUT_ENABLE&quot;) .
-      (HysteresisEnable ? &quot; | WICED_GPIO_HYSTERESIS_ON&quot; : &quot;&quot;) .
-      (PullDown ? &quot; | WICED_GPIO_PULL_DOWN&quot; : &quot;&quot;) .
-      (PullUp ? &quot; | WICED_GPIO_PULL_UP&quot; : &quot;&quot;) .
-      (OutputEnable ? &quot; | WICED_GPIO_OUTPUT_ENABLE&quot; : &quot;&quot;) .
+      (InputDisable ? &quot;GPIO_INPUT_DISABLE&quot; : &quot;GPIO_INPUT_ENABLE&quot;) .
+      (HysteresisEnable ? &quot; | GPIO_HYSTERESIS_ON&quot; : &quot;&quot;) .
+      (PullDown ? &quot; | GPIO_PULL_DOWN&quot; : &quot;&quot;) .
+      (PullUp ? &quot; | GPIO_PULL_UP&quot; : &quot;&quot;) .
+      (OutputEnable ? &quot; | GPIO_OUTPUT_ENABLE&quot; : &quot;&quot;) .
       (InterruptEnable ? &quot; | &quot; . InterruptTrigger : &quot;&quot;)
       }`, \&#xA;
    .default_state = `${DefaultState}`, \&#xA;

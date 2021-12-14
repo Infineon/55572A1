@@ -45,10 +45,10 @@ extern "C" {
 #endif
 
 /**
- *  @addtogroup  bt_types  Wiced BT Types
+ *  @addtogroup  bt_types  AIROC Bluetooth Types
  *  @ingroup     gentypes
  *
- *  WICED BT Types.
+ *  AIROC Bluetooth Types.
  *
  *  @{
  */
@@ -127,7 +127,7 @@ typedef uint8_t         wiced_bt_dev_class_t[DEV_CLASS_LEN];    /**< Device clas
 #define MAX_UUID_SIZE              16  /**< Maximum UUID size - 16 bytes, and structure to hold any type of UUID. */
 
 #define BT_DB_HASH_LEN 16   /**< Database Hash length  */
-typedef uint8_t wiced_bt_db_hash_t[BT_DB_HASH_LEN]; /**< BLE database hash */
+typedef uint8_t wiced_bt_db_hash_t[BT_DB_HASH_LEN]; /**< LE database hash */
 
 #define WICED_BT_GATT_CLIENT_SUPPORTED_FEATURE_OCTET_LEN 1  /**< GATT Client Supported feature length */
 /** GATT Client Support features */
@@ -183,7 +183,7 @@ typedef struct {
  * @{
  */
 #define BT_TRANSPORT_BR_EDR         1       /**< BR/EDR transport */
-#define BT_TRANSPORT_LE             2       /**< BLE transport */
+#define BT_TRANSPORT_LE             2       /**< LE transport */
 typedef uint8_t wiced_bt_transport_t;       /**< Transport type (see @ref WICED_BT_TRANSPORT_TYPE "BT Transport Types") */
 /** @} WICED_BT_TRANSPORT_TYPE */
 
@@ -208,16 +208,16 @@ typedef uint8_t wiced_bt_device_type_t;     /**< Bluetooth device type (see @ref
 #define BLE_ADDR_PUBLIC_ID          0x02        /**< Public ID      */
 #define BLE_ADDR_RANDOM_ID          0x03        /**< Random ID      */
 
-/** BLE device address type (see @ref WICED_BT_ADDR_TYPE "BT Address Types") */
+/** LE device address type (see @ref WICED_BT_ADDR_TYPE "BT Address Types") */
 typedef uint8_t wiced_bt_ble_address_type_t;
 
 /** @} WICED_BT_ADDR_TYPE */
 
-/** Wiced Ble Address structure */
+/** AIROC LE Address structure */
 typedef struct
 {
-    wiced_bt_ble_address_type_t type;   /**< BLE Address Type */
-    wiced_bt_device_address_t   bda;    /**< BLE Address */
+    wiced_bt_ble_address_type_t type;   /**< LE Address Type */
+    wiced_bt_device_address_t   bda;    /**< LE Address */
 } wiced_bt_ble_address_t;
 
 #define LINK_KEY_LEN    16      /**< Link Key Len */
@@ -300,7 +300,7 @@ typedef struct
 /** String copy */
 #define BCM_STRNCPY_S(x1,x2,x3,x4)  strncpy((x1),(x3),(x4))
 
-/* Based on the BT Controller ARM architecture, or possibly other hosts, we can optimize these macros. */
+/* Based on the Bluetooth Controller ARM architecture, or possibly other hosts, we can optimize these macros. */
 #if ((defined STACK_INSIDE_BT_CTRLR) && (STACK_INSIDE_BT_CTRLR == TRUE)) || (defined OPTIMISE_FOR_LITTLE_ENDIAN)
 /** Covert uint32_t to Stream */
 #define UINT32_TO_STREAM(p, u32) {*(uint32_t *)(p) = u32; (p) += 4;}
@@ -427,7 +427,7 @@ extern uint8_t *BTU_copyStreamToBda(uint8_t *pBDA, uint8_t *pStream);
 /** get aligned size */
 #define ALIGN_SIZE(value,align_to) (((value) + (align_to) - 1) & ~((align_to) - 1))
 
-/** Wiced BT Trace Type */
+/** AIROC Bluetooth Trace Type */
 typedef enum {
     WICED_BT_TRACE_DEBUG,
     WICED_BT_TRACE_ERROR,

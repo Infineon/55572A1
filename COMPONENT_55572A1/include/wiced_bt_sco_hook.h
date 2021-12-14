@@ -33,7 +33,7 @@
 
 /** @file
  *  @addtogroup  sco_hook   SCO Hook
- *  @ingroup     wicedbt
+ *  @ingroup     wicedbt_av
  *
  * Bluetooth SCO Hook Application Programming Interface
  *
@@ -147,7 +147,7 @@ typedef union
 /**
  * SCO Hook Callback function type wiced_bt_sco_hook_callback_t
  *
- *                  WICED SCO Hook Event callback (registered with wiced_bt_sco_hook_init)
+ *                  SCO Hook Event callback (registered with wiced_bt_sco_hook_init)
  *
  * @param[in]       event: SCO Hook event received
  * @param[in]       p_data : Data (pointer on union of structure) associated with the event

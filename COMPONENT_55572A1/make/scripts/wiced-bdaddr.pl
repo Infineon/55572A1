@@ -140,8 +140,10 @@ if($bdaddr_setting eq 'default') {
     $mac = "000000000000" if !defined $mac;
 }
 elsif($bdaddr_setting eq 'random') {
-    # append 0 + 4-digits random hex to 7-digit device
-    $mac = sprintf '00000000%04X',int(rand(32768));
+    # prepare 12-digits random hex to mask with * in DLConfigBD_ADDRBase
+    $mac = sprintf '%04X%04X%04X%04X%04X%04X',
+                    int(rand(32768)), int(rand(32768)), int(rand(32768)),
+                    int(rand(32768)), int(rand(32768)), int(rand(32768));
 }
 
 if(defined $mac) {
