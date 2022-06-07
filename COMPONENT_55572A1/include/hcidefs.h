@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -273,10 +273,15 @@
 #define HCI_WRITE_AUTHENT_PAYLOAD_TOUT          (0x007C | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
 #define HCI_READ_LOCAL_OOB_EXT_DATA             (0x007D | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
 
+#define HCI_READ_EXTENDED_PAGE_TIMEOUT (0X07E | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
+#define HCI_WRITE_EXTENDED_PAGE_TIMEOUT (0X07F | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
+#define HCI_READ_EXTENDED_INQUIRY_LENGTH (0X080 | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
+#define HCI_WRITE_EXTENDED_INQUIRY_LENGTH (0X081 | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
 
-#define HCI_CONT_BASEBAND_CMDS_FIRST    HCI_SET_EVENT_MASK
-#define HCI_CONT_BASEBAND_CMDS_LAST     HCI_READ_LOCAL_OOB_EXT_DATA
+#define HCI_CONFIGURE_DATA_PATH (0X083 | HCI_GRP_HOST_CONT_BASEBAND_CMDS)
 
+#define HCI_CONT_BASEBAND_CMDS_FIRST HCI_SET_EVENT_MASK
+#define HCI_CONT_BASEBAND_CMDS_LAST HCI_READ_LOCAL_OOB_EXT_DATA
 
 /* Commands of HCI_GRP_INFORMATIONAL_PARAMS group */
 #define HCI_READ_LOCAL_VERSION_INFO     (0x0001 | HCI_GRP_INFORMATIONAL_PARAMS)
@@ -775,13 +780,15 @@
 #define HCI_BLE_ADV_SET_TERMINATED_EVT              0x12
 #define HCI_BLE_SCAN_REQ_RECEIVED_EVT               0x13
 #define HCI_BLE_CHANNEL_SELECTION_ALOGRITHEM_EVT    0x14
+#define HCI_BLE_PERIODIC_ADV_SYNC_XFER_RECV_EVT     0x18
 #define HCI_BLE_ISOC_CIS_ESTABLISHED_EVT            0x19
 #define HCI_BLE_ISOC_CIS_REQUEST_EVT                0x1A
 #define HCI_BLE_ISOC_CREATE_BIG_EVT                 0x1B
 #define HCI_BLE_ISOC_TERMINATE_BIG_EVT              0x1C
 #define HCI_BLE_ISOC_BIG_SYNC_ESTABLISHED_EVT       0x1D
 #define HCI_BLE_ISOC_BIG_SYNC_LOST_EVT              0x1E
-#define HCI_BLE_ISOC_PEER_PCA_COMPLETE_EVT          0x1F
+#define HCI_BLE_ISOC_PEER_SCA_COMPLETE_EVT          0x1F
+#define HCI_BLE_BIGINFO_ADV_REPORT_EVT              0x22
 
 /* ConnectionLess Broadcast events */
 #define HCI_SYNC_TRAIN_COMP_EVT             0x4F
@@ -1017,16 +1024,16 @@
     27     LE Terminate BIG Complete event
     28     LE BIG Sync Established event
     29     LE BIG Sync Lost event
-    30     LE Request Peer PCA Complete event
+    30     LE Request Peer SCA Complete event
     31     LE Path Loss Threshold event
     32     LE Transmit Power Reporting event
     33     LE BIGInfo Advertising Report event
 */
 #if BTM_BLE_PRIVACY_SPT == TRUE
 /* BLE event mask */
-#define HCI_BLE_EVENT_MASK_DEF               "\x00\x00\x00\x00\x43\x0f\xff\xff"
+#define HCI_BLE_EVENT_MASK_DEF "\x00\x00\x00\x02\x7f\x8f\xff\xff"
 #else
-#define HCI_BLE_EVENT_MASK_DEF               "\x00\x00\x00\x00\x43\x0f\xff\x7f"
+#define HCI_BLE_EVENT_MASK_DEF "\x00\x00\x00\x02\x7f\x8f\xff\x7f"
 #endif
 /*
 ** Definitions for packet type masks (BT1.2 and BT2.0 definitions)
@@ -1136,8 +1143,8 @@
 #define HCI_MAX_INQ_LAP                 0x9E8B3F
 
 /* HCI role defenitions */
-#define HCI_ROLE_CENTRAL                0x00
-#define HCI_ROLE_PERIPHERAL             0x01
+#define HCI_ROLE_CENTRAL                 0x00
+#define HCI_ROLE_PERIPHERAL                  0x01
 #define HCI_ROLE_UNKNOWN                0xff
 
 
@@ -2010,13 +2017,13 @@ typedef struct
 /*
 **   LMP features encoding - page 2
 */
-#define HCI_EXT_FEATURE_CPB_CENTRAL_MASK         0x01
-#define HCI_EXT_FEATURE_CPB_CENTRAL_OFF          0
-#define HCI_CPB_CENTRAL_SUPPORTED(x) ((x)[HCI_EXT_FEATURE_CPB_CENTRAL_OFF] & HCI_EXT_FEATURE_CPB_CENTRAL_MASK)
+#define HCI_EXT_FEATURE_CSB_CENTRAL_MASK         0x01
+#define HCI_EXT_FEATURE_CSB_CENTRAL_OFF          0
+#define HCI_CSB_CENTRAL_SUPPORTED(x) ((x)[HCI_EXT_FEATURE_CSB_CENTRAL_OFF] & HCI_EXT_FEATURE_CSB_CENTRAL_MASK)
 
-#define HCI_EXT_FEATURE_CPB_PERIPHERAL_MASK          0x02
-#define HCI_EXT_FEATURE_CPB_PERIPHERAL_OFF           0
-#define HCI_CPB_PERIPHERAL_SUPPORTED(x) ((x)[HCI_EXT_FEATURE_CPB_PERIPHERAL_OFF] & HCI_EXT_FEATURE_CPB_PERIPHERAL_MASK)
+#define HCI_EXT_FEATURE_CSB_PERIPHERAL_MASK          0x02
+#define HCI_EXT_FEATURE_CSB_PERIPHERAL_OFF           0
+#define HCI_CSB_PERIPHERAL_SUPPORTED(x) ((x)[HCI_EXT_FEATURE_CSB_PERIPHERAL_OFF] & HCI_EXT_FEATURE_CSB_PERIPHERAL_MASK)
 
 #define HCI_EXT_FEATURE_SYNC_TRAIN_CENTRAL_MASK  0x04
 #define HCI_EXT_FEATURE_SYNC_TRAIN_CENTRAL_OFF   0
@@ -2150,6 +2157,12 @@ typedef struct
 #define HCI_LE_FEATURE_PERIODIC_ADVERTISING_MASK        0x20
 #define HCI_LE_FEATURE_PERIODIC_ADVERTISING_OFF         1
 #define HCI_LE_PERIODIC_ADVERTISING_SUPPORTED(x) ((x)[ HCI_LE_FEATURE_PERIODIC_ADVERTISING_OFF] & HCI_LE_FEATURE_PERIODIC_ADVERTISING_MASK)
+
+/* Connected Isochronous Stream: bit 28 and 29 */
+#define HCI_LE_FEATURE_ISOC_CHANNELS_MASK 0x30
+#define HCI_LE_FEATURE_ISOC_CHANNELS_OFF 3
+#define HCI_LE_ISOC_CHANNELS_SUPPORTED(x)                                      \
+  ((x)[HCI_LE_FEATURE_ISOC_CHANNELS_OFF] & HCI_LE_FEATURE_ISOC_CHANNELS_MASK)
 
 /* Channel Selection Algorithm #2 feature: bit 14 */
 //Todo

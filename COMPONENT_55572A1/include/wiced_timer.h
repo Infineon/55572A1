@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -45,19 +45,14 @@
 
 #include "wiced_result.h"
 
-/** Timer callback argument type */
-#if defined  _WIN32 || defined WICEDX || defined __ANDROID__ || defined __APPLE__
-typedef void *wiced_timer_callback_arg_t;
-#else
-typedef uint32_t wiced_timer_callback_arg_t;
-#endif
-typedef wiced_timer_callback_arg_t WICED_TIMER_PARAM_TYPE;  /* To avoid recompiling older apps */
+typedef void* TIMER_PARAM_TYPE;                   /**< Timer callback argument type */
+typedef TIMER_PARAM_TYPE WICED_TIMER_PARAM_TYPE;  /**< To avoid recompiling older apps */
 
 /**
  * Function prototype for the timer call back.
  * @param[in]    cb_params      :Timer callback function
  */
-typedef void (wiced_timer_callback_t)(wiced_timer_callback_arg_t cb_params);
+typedef void (wiced_timer_callback_t)(TIMER_PARAM_TYPE cb_params);
 
 /** Timer structure.
  *
@@ -71,7 +66,7 @@ typedef struct _wiced_timer_t
 {
     struct _wiced_timer_t       *p_next;   /**< internal, next pointer to \ref wiced_timer_t */
     wiced_timer_callback_t      *p_cback;  /**< internal, the callback function */
-    wiced_timer_callback_arg_t  cb_arg;    /**< internal, the callback argument */
+    TIMER_PARAM_TYPE  cb_arg;    /**< internal, the callback argument */
     uint32_t                    pi;        /**< internal, timer flags */
     uint64_t                    tt;        /**< internal, timer timeout */
 } wiced_timer_t;
@@ -105,7 +100,7 @@ extern "C"
  * @return   wiced_result_t
  */
 wiced_result_t wiced_init_timer (wiced_timer_t* p_timer, wiced_timer_callback_t *p_timer_cb,
-                                 wiced_timer_callback_arg_t cb_arg, wiced_timer_type_e timer_type);
+                                 TIMER_PARAM_TYPE cb_arg, wiced_timer_type_e timer_type);
 
 /** Starts a timer
  *

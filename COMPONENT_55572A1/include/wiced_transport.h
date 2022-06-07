@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -52,7 +52,7 @@
  * pool of the desired size. (Refer APIs wiced_transport_create_buffer_pool,
  * wiced_transport_allocate_buffer,wiced_transport_send_buffer)
  *
- *If the application wants to recieve packet of size more than the max size of the buffer
+ *If the application wants to receive packet of size more than the max size of the buffer
  * available in the generic pool, application can do so by configuring a receive buffer pool
  * of the desired size when doing transport init.
  *
@@ -93,7 +93,7 @@ typedef struct _wiced_trans_buffer_pool_t wiced_transport_buffer_pool_t;
 typedef void (*wiced_transport_status_handler_t)( wiced_transport_type_t type );
 
 /** AIROC transport data handler
-* Call back registered by the application to recieve data. Application has to free the
+* Call back registered by the application to receive data. Application has to free the
 * buffer in which data is received. Use the API wiced_transport_free_buffer to free
 * the rx buffer
 *
@@ -187,7 +187,7 @@ typedef struct wiced_transport_cfg_s
 /**
  * Function         wiced_transport_init
  *
- * Intializes and configures the transport and also registers the handlers to be invoked on transport
+ * Initializes and configures the transport and also registers the handlers to be invoked on transport
  * detection and on receiving the data
  *
  * * @param[in]    p_cfg           : AIROC transport config
@@ -329,7 +329,7 @@ wiced_result_t wiced_transport_send_hci_trace( wiced_bt_hci_trace_type_t type, u
  * 4:   buffer size - 268 bytes, buffer count - 12
 
  *
- * Note: Using above genric pools max supportable payload size = 252(16 bytes for internal headers).
+ * Note: Using above generic pools max supportable payload size = 252(16 bytes for internal headers).
  *@param[in]    code                   :Group code and command code
  *@param[in]    p_data                :Pointer to the payload
  *@param[in]    length                 :Payload length

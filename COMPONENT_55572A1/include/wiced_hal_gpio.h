@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -207,8 +207,8 @@ typedef enum
     WICED_P38,      /* LHL GPIO 38 */
     WICED_P39,      /* LHL GPIO 39 */
     /* WICED_GPIO_00 to WICED_GPIO_23 are ARM GPIOs */
-    WICED_GPIO_00,   /* ARM GPIO 0 - 40 */
-    WICED_GPIO_01,   /* ARM GPIO 1 - 41 */
+    WICED_GPIO_00,   /* ARM GPIO 0 - 40  BT_DEV_WAKE */
+    WICED_GPIO_01,   /* ARM GPIO 1 - 41  BT_HOST_WAKE */
     WICED_GPIO_02,   /* ARM GPIO 2 - 42 */
     WICED_GPIO_03,   /* ARM GPIO 3 - 43 */
     WICED_GPIO_04,   /* ARM GPIO 4 - 44 */
@@ -229,8 +229,13 @@ typedef enum
     WICED_GPIO_19,   /* ARM GPIO 19 - 59 */
     WICED_GPIO_20,   /* ARM GPIO 20 - 60 */
     WICED_GPIO_21,   /* ARM GPIO 21 - 61 */
-    WICED_GPIO_22,   /* ARM GPIO 22 - 62 */
-    WICED_GPIO_23,   /* ARM GPIO 23 - 63 */
+    WICED_GPIO_22,   /* ARM GPIO 22 - 62  DMIC_CK */
+    WICED_GPIO_23,   /* ARM GPIO 23 - 63  DMIC_DQ */
+    WICED_GPIO_24,   /* ARM GPIO 24 - 64  I2S_SCK */
+    WICED_GPIO_25,   /* ARM GPIO 25 - 65  I2S_MCK */
+    WICED_GPIO_26,   /* ARM GPIO 26 - 66  I2S_DO */
+    WICED_GPIO_27,   /* ARM GPIO 27 - 67  I2S_DI */
+    WICED_GPIO_28,   /* ARM GPIO 28 - 68  I2S_IRCK */
     MAX_NUM_OF_GPIO
 }wiced_bt_gpio_numbers_t;
 

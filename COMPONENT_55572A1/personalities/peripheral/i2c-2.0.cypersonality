@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--****************************************************************************
+* \file i2c.cypersonality
+* \version 2.0
+*
+* \brief
+* I2C personality description file.
+*
+********************************************************************************
+* \copyright
+* Copyright 2018-2020 Cypress Semiconductor Corporation
+* SPDX-License-Identifier: Apache-2.0
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*****************************************************************************-->
+
+<Personality id="mxs40i2c" name="I2C" version="2.0" path="Communications" xmlns="http://cypress.com/xsd/cyhwpersonality_v1">
+  <Dependencies>
+    <IpBlock name="mxscb">
+      <Param name="I2C" value="1" />
+    </IpBlock>
+    <Resource name="scb" used="true" />
+  </Dependencies>
+  <ExposedMembers />
+  <Parameters>
+    <!-- PDL documentation -->
+    <!--ParamDoc id="pdlDoc" name="Configuration Help" group="Peripheral Documentation" default="file:///`${cy_libs_path()}`/docs/pdl_api_reference_manual/html/group__group__scb__i2c.html" linkText="Open I2C (SCB) Documentation" visible="true" desc="Opens the Peripheral Driver Library Documentation" /-->
+    <ParamDoc id="apiDoc" name="Configuration Help" group="Peripheral Documentation" default="file:///`${cy_libs_path()}`/docs/group___i2_c_driver.html" linkText="Open I2C Documentation" visible="true" desc="Opens the Hardware Driver Documentation" />
+
+    <ParamBool id="DeepSleepCapable" name="DeepSleepCapable" group="Internal" default="`${DEEPSLEEP eq 1}`" visible="false" editable="false" desc="This parameter specifies if SCB block can wakeup from Deep Sleep." />
+    <ParamBool id="SlaveCapable" name="SlaveCapable" group="Internal" default="`${I2C_S eq 1}`" visible="false" editable="false" desc="This parameter specifies if SCB block supports Slave mode." />
+    <ParamBool id="MasterCapable" name="MasterCapable" group="Internal" default="`${I2C_M eq 1}`" visible="false" editable="false" desc="This parameter specifies if SCB block supports Master mode." />
+    <ParamBool id="MasterSlaveCapable" name="MasterCapable" group="Internal" default="`${I2C_M_S eq 1}`" visible="false" editable="false" desc="This parameter specifies if SCB block supports Master-Slave mode." />
+
+    <!-- General -->
+    <ParamChoice id="ModeUser" name="Mode" group="General" default="`${SlaveCapable ? &quot;CY_SCB_I2C_SLAVE&quot; : MasterCapable ? &quot;CY_SCB_I2C_MASTER&quot; : &quot;CY_SCB_I2C_MASTER_SLAVE&quot;}`" visible="true" editable="`${SlaveCapable ? (MasterCapable || MasterSlaveCapable) : MasterCapable ? (SlaveCapable || MasterSlaveCapable) : false}`" desc="This parameter defines the I2C operation mode as: the slave, master or master-slave.">
+      <Entry name="Slave" value="CY_SCB_I2C_SLAVE" visible="`${SlaveCapable}`" />
+      <Entry name="Master" value="CY_SCB_I2C_MASTER" visible="`${MasterCapable}`" />
+    </ParamChoice>
+
+    <ParamBool id="Slave" name="Slave" group="Internal" default="`${ModeUser ne CY_SCB_I2C_MASTER}`" visible="false" editable="false" desc="Enables Slave functionality." />
+    <ParamBool id="Master" name="Master" group="Internal" default="`${ModeUser ne CY_SCB_I2C_SLAVE}`" visible="false" editable="false" desc="Enables Master functionality." />
+
+    <ParamChoice id="DataRate" name="Data Rate (kbps)" group="General" default="100" visible="`${MasterCapable}`" editable="`${MasterCapable}`" desc="Data rate that I2C operates. Maximum data rate is 1000 kbps.">
+      <Entry name="100" value="I2CM_SPEED_100KHZ" visible="`${MasterCapable}`" />
+      <Entry name="400" value="I2CM_SPEED_400KHZ" visible="`${MasterCapable}`" />
+      <Entry name="800" value="I2CM_SPEED_800KHZ" visible="`${MasterCapable}`" />
+      <Entry name="1000" value="I2CM_SPEED_1000KHZ" visible="`${MasterCapable}`" />
+    </ParamChoice>
+
+    <ParamBool id="EnableWakeup" name="Enable Wakeup from Deep Sleep Mode" group="General" default="false" visible="`${DeepSleepCapable}`" editable="true" desc="This parameter enables the I2C to wake the system from Deep-Sleep when a slave address match occurs (only applicable for the slave mode)." />
+
+    <!-- Slave -->
+    <ParamRange id="SlaveAddress" name="Slave Address (7-bit)" group="Slave" default="8" min="8" max="120" resolution="1" visible="`${Slave}`" editable="true" desc="This parameter specifies the 7-bit right justified slave address.
+    The range: 0x08-0x78." />
+    <ParamRange id="SlaveAddressMask" name="Slave Address Mask (8-bit)" group="Slave" default="254" min="0" max="255" resolution="1" visible="`${Slave}`" editable="true" desc="This parameter specifies the slave address mask. The range: 0x00-0xFE.
+    - Bit value 0 – excludes the bit from the address comparison.
+    - Bit value 1 – the bit needs to match with the corresponding bit of the I2C slave address." />
+
+    <ParamBool id="AcceptGeneralCall" name="Accept General Call Address" group="Slave" default="false" visible="`${Slave}`" editable="true" desc="This parameter specifies whether to accept the general call address. The general call address is ACKed when accepted and NAKed otherwise (default). The user has to register the callback function to handle the general call address." />
+
+    <!-- Connections -->
+    <ParamSignal port="i2c_scl[0]" name="SCL" group="Connections" visible="true" desc="Serial clock (SCL) is the master-generated I2C clock." canBeEmpty="false">
+      <Constraint type="ACCEPT" targetLocation="ioss\[\d+\]\.port\[\d+\]\.pin.*" valid="true" >
+        <Parameter id="DriveModes" severity="DEFAULT" reason="">
+          <Fixed value="CY_GPIO_DM_OD_DRIVESLOW" />
+        </Parameter>
+      </Constraint>
+      <Constraint type="ACCEPT" targetLocation="ioss\[\d+\]\.port\[\d+\]\.pin.*" valid="true" >
+        <Parameter id="DriveModes" severity="INFO" reason="The pin Drive Mode parameter does not match expected.">
+          <Fixed value="CY_GPIO_DM_OD_DRIVESLOW" />
+        </Parameter>
+      </Constraint>
+      <Constraint type="ACCEPT" targetLocation=".*" valid="true" />
+    </ParamSignal>
+    <ParamSignal port="i2c_sda[0]" name="SDA" group="Connections" visible="true" desc="Serial data (SDA) is the I2C data signal." canBeEmpty="false">
+      <Constraint type="ACCEPT" targetLocation="ioss\[\d+\]\.port\[\d+\]\.pin.*" valid="true" >
+        <Parameter id="DriveModes" severity="DEFAULT" reason="">
+          <Fixed value="CY_GPIO_DM_OD_DRIVESLOW" />
+        </Parameter>
+      </Constraint>
+      <Constraint type="ACCEPT" targetLocation="ioss\[\d+\]\.port\[\d+\]\.pin.*" valid="true" >
+        <Parameter id="DriveModes" severity="INFO" reason="The pin Drive Mode parameter does not match expected.">
+          <Fixed value="CY_GPIO_DM_OD_DRIVESLOW" />
+        </Parameter>
+      </Constraint>
+      <Constraint type="ACCEPT" targetLocation=".*" valid="true" />
+    </ParamSignal>
+
+    <!-- SCB instance number -->
+    <ParamString id="InstNumber" name="InstNumber" group="Internal" default="`${getInstNumber(&quot;scb&quot;)}`" visible="false" editable="false" desc="SCB Instance name number." />
+
+  </Parameters>
+
+  <DRCs>
+    <!--SlaveAddressMask DRCs-->
+    <!--DRC type="ERROR" paramId="SlaveAddressMask" text="The I2C slave address mask must be even." condition="`${(SlaveAddressMask % 2) ne 0}`" /-->
+    <!-- DRC type="ERROR" paramId="clock[0]" text="The actual data rate `${actualDataRate}` kpbs is greater than desired `${DataRate}` kpbs. Increase clock divider to produce lower clock frequency or adjust desired Data Rate." condition="`${Master ? (!ManualDataRate &amp;&amp; (actualDataRate &gt; DataRate) ) : false}`" / -->
+  </DRCs>
+
+  <ConfigFirmware>
+    <!--ConfigInclude value="wiced_hal_i2c.h" include="true" />
+
+    <ConfigInstruction value="wiced_hal_i2c_init();" include="true" /-->
+  </ConfigFirmware>
+</Personality>

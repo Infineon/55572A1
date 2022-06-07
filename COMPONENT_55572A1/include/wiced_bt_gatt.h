@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -62,6 +62,11 @@
  * Max size of application data allowed to be sent using the signed write cmd.
  */
 #define GATT_CLIENT_MAX_WRITE_SIGNED_DATA (23 - 3 - GATT_AUTH_SIGN_LEN)
+
+/**
+  * GATT Header size (1 byte opcode + 2 byte handle)
+  */
+#define WICED_GATT_HDR_SIZE  3
 
 /**
 * For backward compatiability with previous releases
@@ -915,7 +920,7 @@ typedef union
 /**
  * Structure used by wiced_bt_gattdb APIS, to parse GATTDB
  */
-typedef WICED_BT_STRUCT_PACKED wiced_gattdb_entry_s
+typedef struct wiced_gattdb_entry_s
 {
     uint16_t handle;        /**< attribute Handle  */
     uint8_t  perm;          /**< attribute permission.*/
@@ -1724,6 +1729,17 @@ wiced_bt_gatt_status_t wiced_bt_gatt_get_device_address(uint16_t conn_id, wiced_
     wiced_bt_transport_t* p_transport, wiced_bt_ble_address_type_t* p_addr_type);
 
 /**
+ * API to validate connected gatt conn_id
+ *
+ *  @param[in]  conn_id    : Connection handle of the gatt bearer
+ *
+ *  @returns #wiced_bt_gatt_status_t
+ *
+ *  @ingroup gatt_common_api
+ */
+wiced_bt_gatt_status_t wiced_bt_gatt_validate_conn_id(uint16_t conn_id);
+
+/**
  * @brief Utility function to compare UUIDs
  * @param[in] p_left : UUID to compare
  * @param[in] p_right : UUID to compare
@@ -1838,6 +1854,72 @@ const uint8_t *wiced_bt_gatt_get_handle_value(uint16_t handle, int *p_len);
  * \return number of packets queued to tx
  */
 int wiced_bt_gatt_get_num_queued_tx_packets(uint16_t conn_id, int *p_fragments_with_controller);
+
+/**
+* @brief Utility function to read local registered db by type, by iterating to the next in a loop
+* database entry. Initially \p p_db_start is set to NULL, which resets the search to the head of the local database.
+* The database is traversed to locate the next entry which matches the intended \p type.
+* If an entry is found the data of that entry is written to \p p_disc_data and the entry in the database is returned.
+* The returned entry is passed in the subsequent call to this function in \p p_db_start.
+* If an entry is not found the function returns a NULL, which indicates that the entire database has been iterated and the calling loop
+* can end.
+*
+* @param[in] type: Discovery type
+* @param[in] p_db_start: The database entry to search from. Value of NULL, resets the database pointer to the head
+* @param[out] p_disc_data: discovered data, only valid if the return is not NULL
+*
+* @return wiced_gattdb_entry_t *
+*/
+const wiced_gattdb_entry_t *wiced_bt_gattdb_local_read_data_by_type(wiced_bt_gatt_discovery_type_t type,
+                                                                    const wiced_gattdb_entry_t *p_db_start,
+                                                                    wiced_bt_gatt_discovery_data_t *p_disc_data);
+
+/**
+ * @brief Return a pointer to next GATT DB entry
+ *
+ * @param p_db_entry current Db entry
+ * @return next Db entry
+ */
+wiced_gattdb_entry_t * wiced_bt_gattdb_next_entry (wiced_gattdb_entry_t *p_db_entry);
+
+/**
+ * @brief Utility function to return the 16 bit UUID of the database entry in the local database
+ *  This will return a attribute UUID in the entry. If the attribute uuid is not 2 bytes. It will return 0x0 which is invalid uuid.
+ *
+ * @param[in] p_db_entry: Database entry for which the UUID is to be returned.
+ *
+ * @return 16 bit UUID value if available, or 0
+*/
+uint16_t wiced_bt_gattdb_getAttrUUID16(const wiced_gattdb_entry_t *p_db_entry);
+
+/**
+ * @brief Utility function to return the data of the database entry in the local database
+ *
+ * @param[in] p_db_entry: Database entry of which the data is to be returned.
+ *
+ * @return data of the database entry
+*/
+uint8_t *wiced_bt_gattdb_getAttrValue(const wiced_gattdb_entry_t *p_db_entry);
+
+/**
+ * @brief This function will return a pointer to the actual attribute, skip over the header.
+ *
+ * @param p Database entry of which the data is to be returned
+ * @return data of the database entry
+ */
+uint8_t *wiced_bt_gattdb_getAttrPtr(const wiced_gattdb_entry_t *p);
+
+/**
+ * Function     wiced_bt_gattdb_get_attribute_uuid
+ *
+ *  @param[in]   p_db_entry     : GATT DB atrribute entry
+ *  @param[out]  p_uuid         : pointer to UUID holder. Application should pass the required size of UUID
+ *                                           It is recommended to pass uint8_t[16], so that we can avoid overflow in case of 128 bit uuid
+ *
+ *  @returns size of the UUID
+ *
+ */
+int wiced_bt_gattdb_get_attribute_uuid (wiced_gattdb_entry_t *p_db_entry, uint8_t *p_uuid);
 
 #ifdef __cplusplus
 }

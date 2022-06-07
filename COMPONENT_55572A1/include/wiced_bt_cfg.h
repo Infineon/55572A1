@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -261,7 +261,7 @@ typedef struct
     uint8_t  max_ports;  /**< Maximum number of simultaneous RFCOMM ports */
 } wiced_bt_cfg_rfcomm_t;
 
-/** Isochronous Connection configuration settings */
+/** Ischoronous Connection configuration settings */
 typedef struct
 {
     uint8_t   max_cis_conn;   /**< Max Number of CIS connections */
@@ -269,6 +269,7 @@ typedef struct
     uint16_t  max_sdu_size;   /**< Max SDU size */
     uint8_t   channel_count;  /**< Channel count */
     uint8_t   max_buffers_per_cis;            /**< Max Number of buffers per CIS */
+    uint8_t max_big_count; /**< Max Number of BIG connections */
 }wiced_bt_cfg_isoc_t;
 
 /** BR/EDR configuration settings */

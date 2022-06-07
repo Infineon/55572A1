@@ -4,7 +4,7 @@
 # Each symbol defined below is used in conjunction with the elf file symbol tables.
 #
 #
-# Comma Seperated Value file
+# Comma Separated Value file
 #
 # Name,     Type,     Visibility,     Rename Flag,     Rename Name,     Reserved Flag,
 #
@@ -52,12 +52,17 @@ wiced_bt_ble_update_advertising_white_list       ,           SYMBOL,       PUBLI
 wiced_bt_ble_get_white_list_size                 ,           SYMBOL,       PUBLIC,      2, wiced_bt_ble_get_filter_accept_list_size,   1
 wiced_bt_ble_clear_white_list                    ,           SYMBOL,       PUBLIC,      2, wiced_bt_ble_clear_filter_accept_list,      1
 wiced_bt_ble_update_scanner_white_list           ,           SYMBOL,       PUBLIC,      2, wiced_bt_ble_update_scanner_filter_list,    1
+PORT_GetQueueStatus                              ,           SYMBOL,       PUBLIC,      2, wiced_bt_rfcomm_port_get_queue_status,      1
 #
 # Generic
 #
 BTU_trace_debug                                  ,           SYMBOL,      PUBLIC,            0,                ,                   1
 BTU_trace_error                                  ,           SYMBOL,      PUBLIC,            0,                ,                   1
 wiced_*                                          ,           SYMBOL,      PUBLIC,            0,                ,                   1
+# exclude wiced_bt_mesh_core_calc_uri_hash
+#
+!~wiced_bt_mesh_core_calc_*                      ,           SYMBOL ,      PUBLIC,           0,                ,                   1
+#
 gp_wiced_app_pre_init_cfg                        ,           SYMBOL,      PUBLIC,            0,                ,                   1
 AVCT_Register                                    ,           SYMBOL ,     PUBLIC,            0,                ,                   1
 avrc_is_valid_player_attrib_value                ,           SYMBOL ,     PUBLIC,            0,                ,                   1

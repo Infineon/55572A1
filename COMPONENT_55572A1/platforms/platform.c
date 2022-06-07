@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -40,15 +40,11 @@
 #include "hci_control_api.h"
 #include "platform_mem.h"
 #include "wiced_hal_nvram.h"
-#include "cycfg_pins.h" //it will remove when GeneratedSource/cycfg_pins.h is correct
-
-#define ARIP_I2S_PIN_OUT_AUD3    0x4
+#include "cycfg_pins.h"
 
 extern void     wiced_platform_nvram_delete(uint16_t vs_id, wiced_result_t *p_status);
 extern uint16_t wiced_platform_nvram_read(uint16_t vs_id, uint16_t data_length, uint8_t *p_data, wiced_result_t *p_status);
 extern uint16_t wiced_platform_nvram_write(uint16_t vs_id, uint16_t data_length, uint8_t *p_data, wiced_result_t *p_status);
-extern void wiced_app_hal_init(void );
-extern void wiced_audio_sink_set_arip_I2SPinOut( uint8_t arip_I2SPinOut );
 
 typedef struct platform_virtual_nvram_t
 {
@@ -73,45 +69,6 @@ static struct
     platform_virtual_nvram_t *p_virtual_nvram;
 } platform_cb = {0};
 
-
-void wiced_platform_init(void)
-{
-    uint32_t i = 0;
-
-    wiced_app_hal_init();
-
-    /* Configure pins available on the platform with the chosen functionality */
-    for (i = 0; i < platform_gpio_pin_count; i++)
-    {
-        wiced_hal_gpio_select_function(platform_gpio_pins[i].gpio_pin, platform_gpio_pins[i].functionality);
-    }
-
-    /* Initialize LEDs and turn off by default */
-    for (i = 0; i < led_count; i++)
-    {
-        wiced_hal_gpio_configure_pin(*platform_led[i].gpio, platform_led[i].config, platform_led[i].default_state);
-    }
-
-    /* Initialize buttons with the default configuration */
-    for (i = 0; i < button_count; i++)
-    {
-        wiced_hal_gpio_configure_pin(*platform_button[i].gpio, platform_button[i].config, platform_button[i].default_state);
-    }
-
-    /* Initialize GPIOs with the default configuration */
-    for (i = 0; i < gpio_count; i++)
-    {
-        wiced_hal_gpio_configure_pin(*platform_gpio[i].gpio, platform_gpio[i].config, platform_gpio[i].default_state);
-    }
-
-    wiced_platform_target_puart_init();
-
-    /* I2S PinOut selection */
-    wiced_audio_sink_set_arip_I2SPinOut(ARIP_I2S_PIN_OUT_AUD3);
-
-    /* Platform memory for Bluetooth key info */
-    platform_mem_init();
-}
 
 /**
  * wiced_platform_i2c_init

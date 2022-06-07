@@ -1,4 +1,4 @@
-# 55572A1 firmware build 41
-# patch entries used: 93 out of 256 elf patches, 36%
-CY_PATCH_ENTRIES_BASE=93
-# patch ram used: 34652 out of 57824 bytes, 59%
+# 55572A1 firmware build 104
+# patch entries used: 167 out of 256 elf patches, 65%
+CY_PATCH_ENTRIES_BASE=167
+# patch ram used: 51500 out of 51712 bytes, 99%

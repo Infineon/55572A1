@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -56,17 +56,6 @@
 
 #ifndef TRUE
 #define TRUE  1         /**< true */
-#endif
-
-#ifdef __ARM__
-#define WICED_BT_STRUCT_PACKED  __packed() struct               /**< packed structure */
-#define WICED_BT_UNION_PACKED  __packed() union                 /**< packed union */
-#elif defined(TOOLCHAIN_gnu) || defined(COMPILER_GNU)
-#define WICED_BT_STRUCT_PACKED struct __attribute__((packed))   /**< packed structure */
-#define WICED_BT_UNION_PACKED  union  __attribute__((packed))   /**< packed union */
-#else
-#define WICED_BT_STRUCT_PACKED  struct                          /**< packed structure */
-#define WICED_BT_UNION_PACKED   union                           /**< packed union */
 #endif
 
 /** Surpress Warnings */

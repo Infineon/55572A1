@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -33,8 +33,8 @@
 
 #include <wiced.h>
 #include "wiced_platform.h"
-//#include "cycfg_pins.h"
-#include "cycfg_pins.h" //it will remove when GeneratedSource/cycfg_pins.h is correct
+#include "platform_mem.h"
+#include "cycfg_pins.h"
 #include "bt_types.h"
 
 /* TODO: disallow to access last_seq_num */
@@ -42,6 +42,11 @@ __attribute__((weak)) uint32_t last_seq_num = 0;
 
 /* TODO: temporary implementation for wiced_bt_utils APIs */
 #include <wiced_bt_dev.h>
+
+extern void wiced_app_hal_init(void );
+
+#define ARIP_I2S_PIN_OUT_AUD3    0x4
+extern void wiced_audio_sink_set_arip_I2SPinOut( uint8_t arip_I2SPinOut );
 
 /**
  *  \brief Provide utility function for application to register for cb upon button interrupt
@@ -124,15 +129,227 @@ uint64_t wiced_bt_utils_system_time_microsecond64_get(void)
 }
 #endif
 
-/* TODO: temporary implementation for wiced_hal_gpio APIs */
-__attribute__((weak)) uint32_t wiced_hal_gpio_get_pin_input_status(uint32_t pin)
+#define cr_pad_fcn_ctl_adr5 (0x8fa30294)
+#define cr_pad_fcn_ctl_adr6 (0x8fa30298)
+
+#define AUD_I2S_SELECT_A_GPIO (3)
+
+#if defined(WICED_AUDIO_I2S_CONTROLLER)
+    #define AUD_I2S_SELECT_CLK (1)
+    #define AUD_I2S_SELECT_WS (1)
+    #define AUD_I2S_SELECT_DI (1)
+    #define AUD_I2S_SELECT_DO (1)
+#elif defined(WICED_AUDIO_I2S_TARGET)
+    #define AUD_I2S_SELECT_CLK (2)
+    #define AUD_I2S_SELECT_WS (2)
+    #define AUD_I2S_SELECT_DI (2)
+    #define AUD_I2S_SELECT_DO (2)
+#elif defined(WICED_AUDIO_PCM)
+    #define AUD_I2S_SELECT_CLK (4)
+    #define AUD_I2S_SELECT_WS (4)
+    #define AUD_I2S_SELECT_DI (4)
+    #define AUD_I2S_SELECT_DO (4)
+#endif
+
+wiced_bt_gpio_select_status_t aud_i2s_gpio_select_function(wiced_bt_gpio_numbers_t pin, wiced_bt_gpio_function_t function)
 {
-    return 0;
+    wiced_bt_gpio_select_status_t status = WICED_GPIO_FAILURE;
+    uint32_t shift = 0, value = 0, addr = 0;
+    switch(pin)
+    {
+        case WICED_GPIO_24: // AUD_I2S_SCK
+            addr = cr_pad_fcn_ctl_adr6;
+            shift = 4;
+            if(function == WICED_ARM_A_GPIO_4)
+            {
+                value = AUD_I2S_SELECT_A_GPIO;
+            }
+            else if(function == WICED_AUDIO_CLK)
+            {
+                value = AUD_I2S_SELECT_CLK;
+            }
+            break;
+        case WICED_GPIO_25: // AUD_I2S_MCK
+            addr = cr_pad_fcn_ctl_adr6;
+            shift = 0;
+            if(function == WICED_ARM_A_GPIO_4)
+            {
+                value = AUD_I2S_SELECT_A_GPIO;
+            }
+            else if(function == WICED_AUDIO_CLK)
+            {
+                value = AUD_I2S_SELECT_CLK;
+            }
+            break;
+        case WICED_GPIO_26: // AUD_I2S_DO
+            addr = cr_pad_fcn_ctl_adr5;
+            shift = 24;
+            if(function == WICED_ARM_A_GPIO_5)
+            {
+                value = AUD_I2S_SELECT_A_GPIO;
+            }
+            else if(function == WICED_AUDIO_DO_OUT)
+            {
+                value = AUD_I2S_SELECT_DO;
+            }
+            break;
+        case WICED_GPIO_27: // AUD_I2S_DI
+            addr = cr_pad_fcn_ctl_adr5;
+            shift = 28;
+            if(function == WICED_ARM_A_GPIO_6)
+            {
+                value = AUD_I2S_SELECT_A_GPIO;
+            }
+            else if(function == WICED_AUDIO_DI_IN)
+            {
+                value = AUD_I2S_SELECT_DI;
+            }
+            break;
+        case WICED_GPIO_28: // AUD_I2S_IRCK
+            addr = cr_pad_fcn_ctl_adr6;
+            shift = 8;
+            if(function == WICED_ARM_A_GPIO_7)
+            {
+                value = AUD_I2S_SELECT_A_GPIO;
+            }
+            else if(function == WICED_AUDIO_WS_SYNC)
+            {
+                value = AUD_I2S_SELECT_WS;
+            }
+            break;
+        default:
+            break;
+    }
+    if(addr != 0)
+    {
+        *((volatile uint32_t *)(addr)) &= ~(0xf << shift);
+        *((volatile uint32_t *)(addr)) |= value << shift;
+        status = WICED_GPIO_SUCCESS;
+    }
+    return status;
 }
 
+#define cr_pad_config_adr13 (0x8fa30284)
+#define cr_pad_config_adr14 (0x8fa30288)
 
-__attribute__((weak)) void wiced_hal_gpio_register_pin_for_interrupt(uint16_t pin,
-        void (*userfn)(void*, uint8_t), void* userdata)
+void aud_i2s_gpio_configure_pin(uint32_t pin, uint32_t config, uint32_t outputVal)
 {
-    return;
+    uint32_t shift = 0, value = 0, addr = 0;
+    switch(pin)
+    {
+        case WICED_GPIO_24: // AUD_I2S_SCK
+            addr = cr_pad_config_adr13;
+            shift = 8;
+            break;
+        case WICED_GPIO_25: // AUD_I2S_MCK
+            addr = cr_pad_config_adr13;
+            shift = 0;
+            break;
+        case WICED_GPIO_28: // AUD_I2S_IRCK
+            addr = cr_pad_config_adr13;
+            shift = 16;
+            break;
+        case WICED_GPIO_26: // AUD_I2S_DO
+            addr = cr_pad_config_adr14;
+            shift = 16;
+            break;
+        case WICED_GPIO_27: // AUD_I2S_DI
+            addr = cr_pad_config_adr14;
+            shift = 24;
+            break;
+        default:
+            break;
+    }
+    if(addr != 0)
+    {
+        if(GPIO_INPUT_DISABLE == (GPIO_INPUT_DISABLE & config)) // 2bits here
+        {
+            value |= 0x40;
+        }
+        if(config & GPIO_OUTPUT_ENABLE)
+        {
+            value |= 1;
+        }
+        if(config & GPIO_PULL_UP)
+        {
+            value |= 2;
+        }
+        if(config & GPIO_PULL_DOWN)
+        {
+            value |= 4;
+        }
+        if(config & GPIO_HYSTERESIS_ON)
+        {
+            value |= 8;
+        }
+        *((volatile uint32_t *)(addr)) &= 0xff << shift;
+        *((volatile uint32_t *)(addr)) |= value << shift;
+    }
+}
+
+void wiced_platform_init(void)
+{
+    uint32_t i = 0;
+
+    wiced_app_hal_init();
+
+    /* Configure pins available on the platform with the chosen functionality */
+    for (i = 0; i < platform_gpio_pin_count; i++)
+    {
+        if(platform_gpio_pins[i].gpio_pin <= WICED_GPIO_23)
+        {
+            wiced_hal_gpio_select_function(platform_gpio_pins[i].gpio_pin, platform_gpio_pins[i].functionality);
+        }
+        else
+        {
+            aud_i2s_gpio_select_function(platform_gpio_pins[i].gpio_pin, platform_gpio_pins[i].functionality);
+        }
+    }
+
+    /* Initialize LEDs and turn off by default */
+    for (i = 0; i < led_count; i++)
+    {
+        if(*platform_led[i].gpio <= WICED_GPIO_23)
+        {
+            wiced_hal_gpio_configure_pin(*platform_led[i].gpio, platform_led[i].config, platform_led[i].default_state);
+        }
+        else
+        {
+            aud_i2s_gpio_configure_pin(*platform_led[i].gpio, platform_led[i].config, platform_led[i].default_state);
+        }
+    }
+
+    /* Initialize buttons with the default configuration */
+    for (i = 0; i < button_count; i++)
+    {
+        if(*platform_button[i].gpio <= WICED_GPIO_23)
+        {
+            wiced_hal_gpio_configure_pin(*platform_button[i].gpio, platform_button[i].config, platform_button[i].default_state);
+        }
+        else
+        {
+            aud_i2s_gpio_configure_pin(*platform_button[i].gpio, platform_button[i].config, platform_button[i].default_state);
+        }
+    }
+
+    /* Initialize GPIOs with the default configuration */
+    for (i = 0; i < gpio_count; i++)
+    {
+        if(*platform_gpio[i].gpio <= WICED_GPIO_23)
+        {
+            wiced_hal_gpio_configure_pin(*platform_gpio[i].gpio, platform_gpio[i].config, platform_gpio[i].default_state);
+        }
+        else
+        {
+            aud_i2s_gpio_configure_pin(*platform_gpio[i].gpio, platform_gpio[i].config, platform_gpio[i].default_state);
+        }
+    }
+
+    wiced_platform_target_puart_init();
+
+    /* I2S PinOut selection */
+    wiced_audio_sink_set_arip_I2SPinOut(ARIP_I2S_PIN_OUT_AUD3);
+
+    /* Platform memory for Bluetooth key info */
+    platform_mem_init();
 }

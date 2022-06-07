@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Files xml_version="1" xmlns="http://cypress.com/xsd/cyhobtoviewdie_v2">
+  <!-- Datasheet 002-27934 Rev. *D, Figure 4. CYW55572 System Block Diagram -->
+  <Cores>
+    <Core type="CortexM33" count="1" />
+  </Cores>
+  <IPs file="ipblocks" />
+  <Pins file="pins" />
+</Files>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -257,3 +257,6 @@ enum gatt_appearance_e
     APPEARANCE_LIGHT_EMERGENCY_EXIT             = 1428, /// Emergency Exit Light
     APPEARANCE_LOCATION_AND_NAVIGATION_POD      = 5188,
 };
+
+#define IS_CHAR_DECLARATION_UUID(type)    ((type.len == 2) && (type.uu.uuid16 == GATT_UUID_CHAR_DECLARE))
+#define IS_CHAR_CLIENT_CONFIG_UUID(type)  ((type.len == 2) && (type.uu.uuid16 == GATT_UUID_CHAR_CLIENT_CONFIG))

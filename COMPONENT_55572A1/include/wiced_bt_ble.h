@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2021, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -53,7 +53,7 @@
  */
 
 #include "wiced_bt_dev.h"
-#include "wiced_bt_ble_isoc.h"
+#include "wiced_bt_isoc.h"
 #include "wiced_bt_cfg.h"
 
 
