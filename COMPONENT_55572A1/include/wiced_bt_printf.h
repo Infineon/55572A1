@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -61,7 +61,8 @@ typedef enum
     WICED_ROUTE_DEBUG_TO_WICED_UART, /**< send debug strings in formatted AIROC HCI messages over HCI UART to ClientControl or MCU */
     WICED_ROUTE_DEBUG_TO_HCI_UART,   /**< send debug strings as plain text to HCI UART, used by default if wiced_set_debug_uart() not called */
     WICED_ROUTE_DEBUG_TO_DBG_UART,   /**< Deprecated */
-    WICED_ROUTE_DEBUG_TO_PUART       /**< send debug strings as plain text to the peripheral uart (PUART) */
+    WICED_ROUTE_DEBUG_TO_PUART,      /**< send debug strings as plain text to the peripheral uart (PUART) */
+    WICED_ROUTE_DEBUG_TO_SCB_UART,   /**< send debug strings as plain text to the peripheral SCB uart */
 }wiced_debug_uart_types_t;
 
 #ifdef WICED_SHIM_TRACE_ENABLE
@@ -76,6 +77,31 @@ void wiced_bt_trace_enable(void);
  * Function         wiced_set_debug_uart
  *
  * To specify the UART to be used for the debug traces
+ *
+ * When configure the BT TRACE route to SCB UART, please following the steps below:
+ *
+ *      1. Set debug trace route to SCB UART:
+ *         wiced_set_debug_uart(WICED_ROUTE_DEBUG_TO_SCB_UART);
+ *
+ *      2. Select GPIO for SCB UART RX and TX:
+ *         SCB0 only use WICED_GPIO_15 and WICED_GPIO_14
+ *         wiced_hal_gpio_select_function(WICED_GPIO_14, WICED_ARM_SCB0_UART_RXD);
+ *         wiced_hal_gpio_select_function(WICED_GPIO_15, WICED_ARM_SCB0_UART_TXD);
+ *
+ *         SCB1 only use WICED_GPIO_19 and WICED_GPIO_18
+ *         wiced_hal_gpio_select_function(WICED_GPIO_18, WICED_ARM_SCB1_UART_RXD);
+ *         wiced_hal_gpio_select_function(WICED_GPIO_19, WICED_ARM_SCB1_UART_TXD);
+ *
+ *      3. Set ARM GPIO TX as output:
+ *         SCB0:
+ *         wiced_hal_gpio_configure_pin(WICED_GPIO_15, GPIO_OUTPUT_ENABLE, 0);
+ *         SCB1:
+ *         wiced_hal_gpio_configure_pin(WICED_GPIO_19, GPIO_OUTPUT_ENABLE, 0);
+ *
+ *      4. Initialize and configure the SCB uart:
+ *         wiced_hal_puart_init();
+ *         wiced_hal_puart_flow_off();
+ *         wiced_hal_puart_enable_tx();
  *
  * @param[in]      uart        : UART to be used
  *

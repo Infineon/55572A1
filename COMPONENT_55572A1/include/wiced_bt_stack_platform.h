@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -114,7 +114,7 @@ typedef struct
     /**
      * Platform function to get ACL buffer to send to lower
      *
-     * Called by stack to get a buffer to fill in the data to be sent to 'transport' (BLE or BR/EDR)
+     * Called by stack to get a buffer to fill in the data to be sent to 'transport' (LE or BR/EDR)
      * of 'size'
      *
      * @param[in] transport : Transport on which the buffer is to be sent

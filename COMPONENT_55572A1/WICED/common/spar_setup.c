@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -54,14 +54,14 @@ wiced_pre_init_cfg_t pre_init_cfg = {
     .acl_config     = {
         .host_claim_host_to_device_size = BT_ACL_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE,
         .host_to_device_size = BT_ACL_HOST_TO_DEVICE_DEFAULT_SIZE,
-        .device_claim_device_to_host_size = 0, // this currently is a dont-care for BT
+        .device_claim_device_to_host_size = 0, // this currently is a dont-care for Bluetooth
         .device_to_host_size = BT_ACL_DEVICE_TO_HOST_DEFAULT_SIZE,
         .host_claim_host_to_device_count = BT_ACL_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_COUNT,
         .host_to_device_count = APP_CFG_BT_ACL_HOST_TO_DEVICE_COUNT,
         .device_to_host_count = APP_CFG_BT_ACL_DEVICE_TO_HOST_COUNT,
     },
 
-    /* BLE ACL Configuration - Default Value */
+    /* LE ACL Configuration - Default Value */
     .ble_acl_config = {
         .host_claim_host_to_device_size = BT_BLE_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE,
         .host_to_device_size = APP_BT_BLE_HOST_TO_DEVICE_DEFAULT_SIZE,
@@ -117,10 +117,10 @@ wiced_pre_init_cfg_t pre_init_cfg = {
     .app_iram_data_length = (uint32_t)&app_iram_data_length,
     .app_irom_data_begin = &app_irom_data_begin,
 
-    /* Maximum BLE connection number - Default */
+    /* Maximum LE connection number - Default */
     .ble_con_max = APP_CFG_ULP_MAX_CONNECTION,
 
-    /* BLE ISO Buffer Configuration - Default Value */
+    /* LE ISO Buffer Configuration - Default Value */
     .iso_buf_cfg = {
         .host_claim_host_to_device_size = BT_BLE_ISOC_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE,
         .host_to_device_size = BT_BLE_ISOC_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE,

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -920,7 +920,7 @@ uint8_t wiced_bt_l2cap_get_chnl_fcr_mode (uint16_t lcid);
 
 /**
  * @if DUAL_MODE
- *  @addtogroup  l2cap_le_api_functions       BLE
+ *  @addtogroup  l2cap_le_api_functions       LE
  *  @ingroup     l2cap
  *  API's used for LE \ref l2cap "L2CAP".
  * @else

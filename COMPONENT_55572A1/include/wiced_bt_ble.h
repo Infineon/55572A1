@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -870,6 +870,23 @@ wiced_result_t wiced_bt_ble_set_raw_advertisement_data(uint8_t num_elem,
  *
  */
 uint8_t *wiced_bt_ble_check_advertising_data( uint8_t *p_adv, wiced_bt_ble_advert_type_t type, uint8_t *p_length);
+
+/**
+ * When multiple entry for same adv type is available in the adv data this api will help to get next entry of specified advertisement data type
+ * when there is a single instance use wiced_bt_ble_check_advertising_data
+ *
+ * @param[in]       p_adv       : pointer to advertisement data
+ * @param[in]       p_offset    : offset from the start of the adv data recevied, also returns next offset to start searching from
+ * @param[in]       type        : advertisement data type to look for
+ * @param[out]      p_length    : length of advertisement data (if found)
+ *
+ * @return          pointer to next requested advertisement data (if found). NULL if requested data type not found.
+ *
+ */
+uint8_t *wiced_bt_ble_get_next_adv_entry(uint8_t *p_adv,
+                                         int *p_offset,
+                                         wiced_bt_ble_advert_type_t type,
+                                         uint8_t *p_length);
 
 /**
  *

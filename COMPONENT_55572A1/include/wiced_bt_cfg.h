@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -64,7 +64,7 @@ extern "C" {
  *
  * Bluetooth Configuration Default Values
  *
- * @note These are typical values for config parameters used for some common BLE, BR/EDR use cases.
+ * @note These are typical values for config parameters used for some common LE, BR/EDR use cases.
  */
 #define WICED_BT_CFG_DEFAULT_INQUIRY_SCAN_INTERVAL                  0x0800      /**< Inquiry scan interval (in slots (1 slot = 0.625 ms)) */
 #define WICED_BT_CFG_DEFAULT_INQUIRY_SCAN_WINDOW                    0x0012      /**< Inquiry scan window (in slots (1 slot = 0.625 ms)) */

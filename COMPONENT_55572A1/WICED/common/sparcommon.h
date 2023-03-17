@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -48,7 +48,7 @@ void application_start(void);
 #define APP_CFG_BT_ACL_DEVICE_TO_HOST_COUNT         12 //BT_ACL_DEVICE_TO_HOST_DEFAULT_COUNT
 #endif
 
-/* BLE ACL config */
+/* LE ACL config */
 // ((BT_BLE_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE + BLE_ACL_BUF_SIZE_OVERHEAD) & ~0x3) + (((BT_BLE_HOST_CLAIM_HOST_TO_DEVICE_DEFAULT_SIZE + BLE_ACL_BUF_SIZE_OVERHEAD) & 0x3)?4:0)
 #define APP_BT_BLE_HOST_TO_DEVICE_DEFAULT_SIZE      264
 //((BT_BLE_DEVICE_CLAIM_DEVICE_TO_HOST_DEFAULT_SIZE + BLE_ACL_BUF_SIZE_OVERHEAD) & ~0x3) + (((BT_BLE_DEVICE_CLAIM_DEVICE_TO_HOST_DEFAULT_SIZE + BLE_ACL_BUF_SIZE_OVERHEAD) & 0x3)?4:0)
@@ -113,7 +113,7 @@ void application_start(void);
 #define APP_CFG_ULP_MAX_CONNECTION                  4 //ULP_MAX_CONNECTION
 #endif
 
-/* BLE ISO buffer */
+/* LE ISO buffer */
 #ifndef APP_CFG_BT_BLE_ISOC_HOST_TO_DEVICE_COUNT
 #define APP_CFG_BT_BLE_ISOC_HOST_TO_DEVICE_COUNT    1 //BT_BLE_ISOC_HOST_TO_DEVICE_DEFAULT_COUNT
 #endif

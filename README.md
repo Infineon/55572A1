@@ -1,5 +1,4 @@
-------------------------------------------------------------------------------------
-# BTSDK - CYW55572
+# AIROC&#8482; BTSDK - CYW55572
 
 ## Overview
 The Infineon CYW55572 is a high-performance Wi-Fi 6/6E (11ax) and Bluetooth&#174; 5.2
@@ -21,5 +20,3 @@ audio.
 #### CYW955572BTEVK-01:
 - CYW55572 M.2 Bluetooth&#174; module + CYW9BT Audio3 Arduino shield (CYW955572M2BT1LV + CYW9BTM2BASE1 + CYW9BTAUDIO3)<br>
    Max UART baud rate is 3M
-
-------------------------------------------------------------------------------------

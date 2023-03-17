@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2022, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -114,6 +114,32 @@ typedef enum
  */
 typedef uint32_t (*wiced_sleep_allow_check_callback ) (wiced_sleep_poll_type_t type );
 
+typedef enum
+{
+//! sleep is not allowed
+    PMU_SLEEP_NOT_ALLOWED,
+//! sleep is not disabling any part of HW, just doing processor sleep
+    PMU_SLEEP_WITH_XTAL_ON,
+//! same as PMU_SLEEP_WITH_XTAL but XTAL is disabled
+    PMU_SLEEP_WITH_XTAL_OFF,
+//! PDS sleep is disabling part of HW during sleep but isolation is not enabled
+    PMU_SLEEP_LITE_PDS,  // not used anymore in FW2
+//! PDS sleep is disabling part of HW during sleep
+    PMU_SLEEP_PDS,
+//! EPDS sleep is disabling most of HW during sleep, RAM is powered ON, after sleep system reboots
+    PMU_SLEEP_EPDS,
+    PMU_SLEEP_MAX=PMU_SLEEP_EPDS
+} pmu_sleep_t;
+
+/** API to configure PMU sleep mode parameters.
+ *
+ * @param[in]       sleep_mode: see @pmu_sleep_t
+ *
+ * @return          WICED_SUCCESS
+ */
+
+wiced_result_t wiced_sleep_allow_sleep ( pmu_sleep_t sleep_mode );
+
 /** Sleep configuration parameters */
 typedef struct
 {
@@ -146,8 +172,6 @@ typedef struct
  * @return          WICED_SUCCESS or WICED_ERROR
  */
 wiced_result_t wiced_sleep_configure( wiced_sleep_config_t *p_sleep_config );
-/* TODO: chip specific implementation (no wiced_sleep.h implementation) in bt_hs_spk_pm_init */
-#define wiced_sleep_configure(p_sleep_config)    ((void)p_sleep_config, WICED_FALSE)
 
 
 /** API to request reboot type.
