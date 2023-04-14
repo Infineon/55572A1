@@ -1988,21 +1988,6 @@ wiced_result_t wiced_bt_dev_push_nvram_data(wiced_bt_device_link_keys_t *paired_
 extern uint16_t wiced_bt_utils_acl_conn_handle_get(wiced_bt_device_address_t remote_bda, wiced_bt_transport_t transport);
 #define wiced_bt_conn_handle_get(remote_bda, transport) wiced_bt_utils_acl_conn_handle_get(remote_bda, transport)
 
-/**
- *
- * This function is called to set the Link Policy for remote device
- *
- * @param[in]       remote_bda      : remote device's address
- * @param[in/out]   settings        : pointer to the settings value.
- *                                    the policy setting is defined in hcidefs.h
- *                                    if the input setting consists of unsupport feature
- *                                    for local device, it will be cleared
- *
- * @return          wiced_result_t
-*/
-wiced_result_t wiced_bt_dev_set_link_policy(wiced_bt_device_address_t remote_bda,
-        uint16_t *settings);
-
 /**@} wicedbt_utility */
 
 /**
