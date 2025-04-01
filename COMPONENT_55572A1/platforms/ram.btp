@@ -29,10 +29,11 @@ DevicePreset "CYW955572 RAM"
     DLConfigSerialControlBaudRate = 115200
     DLConfigEEPROMAccessSpeed = 100
     DLConfigVSOffset = 0
-    ConfigDSLocation = 0x80428000
-    DLConfigSSLocation = 0x80420000
+    ConfigDSLocation = 0x8042C400
+    ConfigDS2Location = 0
+    DLConfigSSLocation = 0x80427C00
     DLConfigIncludeBTWSecurityKey = 0
-    DLConfigVSLocation = 0x80421000
+    DLConfigVSLocation = 0
     DLConfigVSLength = 0x0000
     DLConfigRemoteDeviceCount = 0
     DLConfigBD_ADDRBase = "55572A1*****"

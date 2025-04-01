@@ -30,6 +30,7 @@ DevicePreset "CYW955572 Flash"
     DLConfigEEPROMAccessSpeed = 100
     DLConfigVSOffset = 0
     ConfigDSLocation = 0x00680000
+    ConfigDS2Location = 0x6C0000
     DLConfigSSLocation = 0x00600000
     DLConfigIncludeBTWSecurityKey = 0
     DLConfigVSLocation = 0x00640000

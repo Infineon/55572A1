@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -87,7 +87,7 @@ wiced_bt_gatt_status_t wiced_bt_util_set_gatt_client_config_descriptor(uint16_t 
 wiced_bt_gatt_status_t wiced_bt_util_send_gatt_discover(uint16_t conn_id, wiced_bt_gatt_discovery_type_t type, uint16_t uuid, uint16_t s_handle, uint16_t e_handle);
 
 /**
- * Function     wiced_bt_gatt_status_t wiced_bt_util_send_gatt_read_by_handle(uint16_t conn_id, uint16_t handle)
+ * Function     wiced_bt_util_send_gatt_read_by_handle
  *
  *              Format and send Read By Handle GATT request.
  *
@@ -97,7 +97,7 @@ wiced_bt_gatt_status_t wiced_bt_util_send_gatt_discover(uint16_t conn_id, wiced_
  *  @return @link wiced_bt_gatt_status_e wiced_bt_gatt_status_t @endlink
  *
  */
-wiced_bt_gatt_status_t wiced_bt_util_send_gatt_read_by_handle(uint16_t conn_id, uint16_t handle);
+wiced_bt_gatt_status_t wiced_bt_util_send_gatt_read_by_handle(uint16_t conn_id, uint16_t handle, uint8_t *p_read_buf, uint16_t read_len);
 
 /**
  * Function       wiced_bt_util_send_gatt_read_by_type

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -2083,6 +2083,9 @@ typedef struct
 #define HCI_LE_FEATURE_POWER_CHANGE_IND_BIT_POS             34      /**< LE Power Change Indication */
 #define HCI_LE_FEATURE_PATH_LOSS_MONITO_BIT_POS             35      /**< LE Path Loss Monitoring */
 #define HCI_LE_FEATURE_MAX_BIT_POS                          HCI_LE_FEATURE_PATH_LOSS_MONITO_BIT_POS       /**< Max Possible Value */
+
+typedef uint8_t wiced_bt_ble_feature_bit_t; /**< LE supported feature bits */
+
 
 /*
 **   LE features encoding - page 0

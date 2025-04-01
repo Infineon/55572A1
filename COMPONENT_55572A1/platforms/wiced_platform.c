@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -85,12 +85,6 @@ uint32_t wiced_platform_get_button_pressed_value(wiced_platform_button_number_t 
 wiced_bool_t wiced_bt_utils_acl_connect(wiced_bt_device_address_t remote_bd_addr)
 {
     return WICED_FALSE;
-}
-
-uint16_t wiced_bt_utils_acl_conn_handle_get(
-        wiced_bt_device_address_t remote_bda, wiced_bt_transport_t transport)
-{
-    return 0xFFFF;
 }
 
 wiced_bool_t wiced_bt_utils_acl_start_authentication(

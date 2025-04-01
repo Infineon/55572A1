@@ -41,10 +41,8 @@
 #
 # public API renames
 #
-wiced_blehidd_allow_slave_latency                ,           SYMBOL ,      PUBLIC,      2, wiced_blehidd_allow_peripheral_latency,     1
 _rbg200_get_psrng                                ,           SYMBOL ,      PUBLIC,      2, wiced_hal_get_pseudo_rand_number,           1
 bcsulp_AES                                       ,           SYMBOL,       PUBLIC,      2, wiced_bcsulp_AES,                           1
-wiced_bt_ble_get_white_list_size                 ,           SYMBOL,       PUBLIC,      2, wiced_bt_ble_get_filter_accept_list_size,   1
 PORT_GetQueueStatus                              ,           SYMBOL,       PUBLIC,      2, wiced_bt_rfcomm_port_get_queue_status,      1
 #
 # Generic

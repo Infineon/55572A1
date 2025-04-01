@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -1813,6 +1813,20 @@ uint8_t *wiced_btm_get_private_bda(void);
  */
 extern wiced_result_t wiced_bt_utils_ble_private_device_address_resolution(wiced_bt_device_address_t rpa, BT_OCTET16 irk);
 #define wiced_ble_private_device_address_resolution(rpa, irk) wiced_bt_utils_ble_private_device_address_resolution(rpa, irk)
+
+/**
+* Function wiced_bt_ble_set_host_features
+*
+*          This API is called to set the supported host features
+*
+* @param[in]  feature   bit position of required feature
+* @param[in]  bit_value Value to enable or disable Advertising Coding Selection Host Support feature bit
+*
+* @return          wiced_result_t
+*                  WICED_BT_SUCCESS Advertising Coding Selection Host Support feature bit is modified
+*                  WICED_BT_ERROR   otherwise.
+*/
+wiced_bt_dev_status_t wiced_bt_ble_set_host_features(wiced_bt_ble_feature_bit_t feature, uint8_t bit_value);
 
 /**@} btm_ble_api_functions */
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+ * Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
  * an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
  *
  * This software, including source code, documentation and related
@@ -778,6 +778,20 @@ wiced_bt_isoc_setup_data_path(uint16_t conn_hdl, wiced_bool_t is_cis,
 
 wiced_bool_t wiced_bt_isoc_configure_data_path(wiced_bt_isoc_data_path_direction_t data_path_dir,
                                                wiced_bt_isoc_data_path_id_t data_path_id);
+
+/**
+  * This function writes ISO buffer to the lower layer (or controller in the Hosted Stack)
+  *
+  * Called by application to send the isoc data.
+  *
+  * @param[in] transport : Transport types(BR/EDR/LE)
+  * @param[in] p_data    : Pointer to the buffer
+  * @param[in] len       : Length of data at p_data
+  *
+  * @return : wiced_bool_t TRUE if successful otherwise FALSE
+  */
+wiced_bool_t wiced_bt_write_iso_data_to_lower(wiced_bt_transport_t transport, uint8_t* p_data, uint16_t len);
+
 /**@} wicedbt_isoc_functions */
 
 #ifdef __cplusplus

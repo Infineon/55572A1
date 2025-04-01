@@ -1,5 +1,5 @@
 #
-# Copyright 2016-2023, Cypress Semiconductor Corporation (an Infineon company) or
+# Copyright 2016-2025, Cypress Semiconductor Corporation (an Infineon company) or
 # an affiliate of Cypress Semiconductor Corporation.  All rights reserved.
 #
 # This software, including source code, documentation and related
@@ -131,16 +131,15 @@ CY_CORE_DEFINES+=\
     -DOTA_CHIP=$(CHIP) \
     -DCHIP_REV_$(BLD)_$(CHIP)$(CHIP_REV)=1 \
     -DCOMPILER_ARM \
-    -DBTSTACK_VER=0x03000001 \
     -DSPAR_APP_SETUP=application_setup \
     -DPLATFORM='"$(subst -,_,$(TARGET))"' \
     -D$(subst -,_,$(TARGET))
 
 CY_CORE_EXTRA_DEFINES=\
     -DWICED_SDK_MAJOR_VER=4 \
-    -DWICED_SDK_MINOR_VER=2 \
-    -DWICED_SDK_REV_NUMBER=1 \
-    -DWICED_SDK_BUILD_NUMBER=2932
+    -DWICED_SDK_MINOR_VER=9 \
+    -DWICED_SDK_REV_NUMBER=2 \
+    -DWICED_SDK_BUILD_NUMBER=38065
 
 #
 # Set the output file paths

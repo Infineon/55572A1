@@ -2,6 +2,6 @@
 <View xml_version="1" xmlns="http://cypress.com/xsd/cystudiouddviewdie_v1">
   <Files>
   </Files>
-  <!-- See comments in https://jira.cypress.com/browse/CONFIGURATORS-6506 -->
+  <!-- See comments in Jira CONFIGURATORS-6506 -->
   <HasUserControllableMcu value="true" />
 </View>
